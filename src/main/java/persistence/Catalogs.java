@@ -14,6 +14,7 @@ import beans.Person;
 import beans.Question;
 import beans.QuestionType;
 import beans.Quiz;
+import beans.QuizSolution;
 import beans.Student;
 import beans.Teacher;
 import dao.Idao;
@@ -28,7 +29,7 @@ public class Catalogs implements Idao
 	private ArrayList<Teacher> teachers;
 	private ArrayList<Student> students;
 	private ArrayList<QuestionType> questionTypes;
-	
+	private ArrayList<QuizSolution> solutions;
 	
 	
 	
@@ -40,6 +41,7 @@ public class Catalogs implements Idao
 		setQuestionTypes();
 		setQuestions();
 		setQuizzes();
+		setSolutions();
 	}
 	
 	public static Catalogs get()
@@ -262,6 +264,46 @@ public class Catalogs implements Idao
 		}
 
 	}
+	
+	private void setSolutions()
+	{
+		if (solutions == null) solutions = new ArrayList<>();
+		
+		String query1 = "select * from omj_final.tbl_quiz_solution";
+		String query2 = "select * from omj_final.tbl_question_solution_answer";
+		
+		try
+		{
+		Statement statement = connection.createStatement();
+		ResultSet rs1 = statement.executeQuery(query1);
+		GregorianCalendar creationDate = new GregorianCalendar();
+		while (rs1.next())
+			{
+				int idStudent = rs1.getInt("student");
+				int idQuiz = rs1.getInt("quiz");
+				creationDate.setTimeInMillis(rs1.getDate("date_solution").getTime());
+				solutions.add(new QuizSolution(quizzes.stream().filter(q -> (q.getId() == idQuiz)).findFirst().get().getThema(),
+						rs1.getInt("id"),
+						students.stream().filter(s -> (s.getId() == idStudent)).findFirst().get(),
+						quizzes.stream().filter(q -> (q.getId() == idQuiz)).findFirst().get(),
+						creationDate)); 
+			}
+		ResultSet rs2 = statement.executeQuery(query2);
+		while(rs2.next())
+		{
+			int idSolution = rs2.getInt("quiz_solution");
+			int idQuestion = rs2.getInt("question");
+			Question question = questions.stream().filter(q -> (q.getId() == idQuestion)).findFirst().get();
+			solutions.stream()
+				.filter(s -> (s.getId() == idSolution))
+				.findFirst().get().addAnswer(question, rs2.getString("student_answer"));
+		}
+		} catch (SQLException e)
+		{
+		e.printStackTrace();
+		System.exit(1);
+		}
+	}
 
 	/**
 	 * @return the questions
@@ -379,6 +421,22 @@ public class Catalogs implements Idao
 	}
 
 	
+	/**
+	 * @return the solutions
+	 */
+	public ArrayList<QuizSolution> getSolutions()
+	{
+		return solutions;
+	}
+
+	/**
+	 * @param solutions the solutions to set
+	 */
+	public void saveSolutions(ArrayList<QuizSolution> solutions)
+	{
+		this.solutions = solutions;
+	}
+
 	public void saveCatalogs()
 	{
 		//TODO all separate save functions

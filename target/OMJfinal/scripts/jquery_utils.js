@@ -24,7 +24,7 @@ $(function() {
 	// tabbed panels
     $( "#tabs-div" ).tabs({
     	collapsible: true,
-    	disabled: [ 2, 3, 4 ]
+    	disabled: [ 2, 3, 4, 5 ]
     });
     
     //log in dialog windows 
@@ -156,6 +156,94 @@ function sortQuizzes()
 		});	
 }
 
+function fillSolutionsForStudent()
+{
+	$.ajax({
+		type: "GET",
+		url: "solutions",
+		data: student,
+		dataType: "json",
+		success: function(json)
+	      {
+			 var headings = ["Quiz ID", "Thema", "Date", "Score", "Question", "Correct answer", "Your answer"];
+			 var ids = [], rows = [], correct_answers = [], student_answers = [];
+			 var themas = new Set(),  dates = new Set(), scores = new Set();
+			 ids[0] = "Quiz ID";
+			 themas.add("Thema");
+			 dates.add("Date");
+			 scores.add("Score");
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+//				 correct_answers[i-1] = getBulletedList(json.answers.values);
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score]];
+				 ids[i] = json[i-1].id;
+				 themas.add(json[i-1].thema);
+				 dates.add(json[i-1].date_solution);
+				 scores.add(json[i-1].score);
+			 }
+			var number = document.getElementById('numberSolution');
+			var thema = document.getElementById('themaSolution');
+			var date = document.getElementById('dateSolution');
+			var score = document.getElementById('scoreSolution');
+			for(var i = 0; i < ids.length; i++) 
+			{
+			    var optNumber = document.createElement('option');
+			    optNumber.innerHTML = ids[i];
+			    optNumber.value = ids[i];
+			    number.appendChild(optNumber);
+			}
+			
+			themas.forEach(function(value){
+				var optThema = document.createElement('option');
+				optThema.innerHTML = value;
+				optThema.value = value;
+				thema.appendChild(optThema);
+			});
+			
+			dates.forEach(function(value){
+				var optDate = document.createElement('option');
+				optDate.innerHTML = value;
+				optDate.value = value;
+				date.appendChild(optDate);
+			})
+			
+			scores.forEach(function(value){
+				var optScore = document.createElement('option');
+				optScore.innerHTML = value;
+				optScore.value = value;
+				score.appendChild(optScore);
+			})
+			
+			htmlInsert("solutionsTable", getSortedTable(headings, rows, 'solutionsResult'));
+			
+			//sort table
+			$("#solutionsResult").tablesorter();
+			
+			//make cell clickable
+			  $('.clickableCell').click(function(e){openQuizSolutionDialog(e.target.innerHTML, 0)});
+			//add quiz info on hover
+			  $().hover
+			  
+			//couple option selection with function
+//			$('#number').change(sortQuizzes); 
+//			$('#thema').change(sortQuizzes);
+//			$('#study_year').change(sortQuizzes);
+//			$('#number_questions').change(sortQuizzes);
+	      },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
+}
+
+function fillSolutionsForTeacher()
+{
+	
+}
+
 //***************Dialog Windows Functions **********************
 
 function openLogin()
@@ -226,6 +314,8 @@ function loginDialog()
 									//if student is logged in tabs with personal tasks and results become enabled
 									$( "#tabs-div" ).tabs("enable", 2);
 									$( "#tabs-div" ).tabs("enable", 3);
+									//loading results for inlogged student
+									fillSolutionsForStudent();
 								}
 							else if (json.specialisation != null) 
 								{
@@ -234,6 +324,8 @@ function loginDialog()
 									
 									$('#login').html("<h4>Hello, " + teacher.firstName + " " + teacher.secondName + "</h4>");
 									$( "#tabs-div" ).tabs("enable", 4);
+									$( "#tabs-div" ).tabs("enable", 5);
+									fillSolutionsForTeacher();
 								}
 							else alert(json.id);
 							$( "#loginDialog" ).dialog( "close" );
@@ -535,9 +627,24 @@ function getTable(headings, rows)
 
 function getSortedTable(headings, rows, tableId) 
 {
-  var table = " <p class=tip> Total " + rows.length + " quizzen found" + 
+	var text = "";
+	switch(tableId)
+	{
+		case ("quizResult"):
+			text = " quizzen found" + 
 			  " <em>TIP!</em> Sort by clicking column header! </p> " +
-			  "<p class=tip> <em>TIP!</em> Click Quiz ID for more information </p>" + 
+			  "<p class=tip> <em>TIP!</em> Click Quiz ID to start Quiz (only for inlogged students) </p>";
+			break;
+		case ("solutionsResult"):
+			text = " solution(s) found" + 
+			  " <em>TIP!</em> Sort by clicking column header! </p> ";
+			break;
+		default:
+			break;		
+	}
+
+	
+	var table = " <p class=tip> Total " + rows.length + text + 
 	  		  "<table id = " + tableId +  " border='1' class='ajaxTable'>\n" +
   			  	"<thead>" +  getTableHeadings(headings) + "</thead>" +
   			  	"<tbody>" + getTableBody(rows) + "</tbody>" +
@@ -620,5 +727,18 @@ function updateTips( t ) {
 	setTimeout(function() {
 		$("P.validateTips").removeClass( "ui-state-highlight", 1500 ).text("");
 	}, 1500 );
+}
+
+//Takes an array of strings and produces a <ul>
+//list with the strings inside the <li> elements.
+function getBulletedList(listItems) 
+{
+	var list = "<ul>\n";
+	for(var i=0; i < listItems.length; i++) 
+	{
+		list = list + "  <li>" + listItems[i] + "</li>\n";
+	}
+	list = list + "</ul>"
+	return(list);
 }
 //*********** end utils

@@ -27,8 +27,8 @@
 		    <li><a href="#quiz_tab">Quiz</a></li>
 		    <li><a href="#results_tab">My Results</a></li>
 		    <li><a href="#tasks_tab">My tasks</a></li>
-			<li><a href="#panel3">For teacher</a></li>    
-		    <li><a href="#panel4">Reserved</a></li>
+			<li><a href="#teacher_results">For teacher. Results</a></li>    
+		    <li><a href="#teacher_tasks">For teacher. Assign tasks</a></li>
 		  </ul>
 		  <div id="home_tab">
 	        <h2>Structure</h2>
@@ -70,20 +70,36 @@
 		    </table>
 		  </div>
 		  <div id="results_tab">
-		    <p>Content for second panel.</p>
-		    <p>More info</p>		    
-		    <p>For group1 and group2.</p>
+		    <table>
+			<tr>
+			<td>
+				<fieldset class = quiz><legend>Filter results</legend>
+				<form action="#" id = "findSolutions" >
+	        	<table class = 'ajaxTable'>
+		        	<tr>
+		        		<td><select name="number" id=numberSolution></select></td>
+		        		<td><select name="thema" id=themaSolution></select></td>
+		        		<td><select name="dateSolution" id=dateSolution></select></td>
+		        		<td><select name="scoreSolution" id=scoreSolution></select></td>
+		        	</tr>        	
+		        </table>
+		        </form>
+		        </fieldset>
+		        <div id="solutionsTable"></div>
+		     </td>
+		     </tr>
+		    </table>
 		  </div>
 		  <div id="tasks_tab">
 		    <p>Content for second panel.</p>
 		    <p>More info</p>		    
 		    <p>For group1 and group2.</p>
 		  </div>
-		  <div id="panel3">
+		  <div id="teacher_results">
 		    <p>Content for second panel.</p>
 		    <p>More info</p><p>For group3 and group4.</p>
 		  </div>
-		  <div id="panel4">
+		  <div id="teacher_tasks">
 		    <p>Content for second panel.</p>
 		   <p>More info</p><p>For group3 and group4.</p>
 		  </div>
