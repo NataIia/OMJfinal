@@ -1,0 +1,147 @@
+body {
+margin: 0;
+padding: 0; 
+background-color: #993300;
+clear: both;
+}
+
+select{
+	width: 100%;
+}
+
+#container{
+margin: 0px auto;
+width: 90%;
+background: #E2D3B6;
+overflow: hidden;
+border-radius: 0px 0px 25px 25px;
+}
+
+
+/* beginning top part */
+#header{
+margin: 0px 5% 5% 5%;
+width: 90%;
+height: 220px;
+background-image: url(images/tree.jpg);
+background-position: center;
+background-repeat: no-repeat;
+}
+
+#title{
+width: 400px;
+height: 100px;
+float: left;
+text-align: left;
+color: #ffffff;
+margin-top: 34px;
+margin-left: 20%;
+}
+
+#login{
+float: right;
+color: #ffffff;
+margin-right: 10%;
+cursor: pointer;
+/*background-color: #993300;
+border: 3px solid #993300;
+border-radius: 60px;
+box-shadow: 0px 1px 10px 1px #993300;*/
+font-family: 'lobster',sans-serif;
+font-weight: bold;
+line-height: 1;
+}
+/* end top part*/
+
+
+/* start main part*/
+#main {
+margin: -150px 5% 5% 4%;
+width: 92%;
+overflow: hidden;
+background-position: center;
+box-shadow: 0px 5px 50px 5px #993300;
+}
+
+/* text formatting*/
+
+h2{
+padding-left: 60px;
+border: 3px solid #993300;
+border-radius: 60px;
+box-shadow: 0px 1px 10px 1px #993300;
+font-family: 'lobster',sans-serif;
+font-size: 19px;
+font-weight: bold;
+line-height: 1;
+}
+
+h3{
+font-family: Verdana, Arial, Times, san-serif;
+font-size: 12px;
+font-weight: bold;
+color: #663333;
+}
+
+h4{
+font-size: 15px;
+font-weight: bold;
+color: #ffffff;
+}
+
+p{
+font-family: Verdana, Arial, Times, san-serif;
+font-size: 11px;
+color: #333333;
+padding-left: 20px;
+}
+/* end main part */
+
+#login_panel, #register_panel, #loginForm, #registrationForm{
+height: 100% !important;
+}
+
+/* ============ Answer dialog ============ */
+#progressbar1, #progressbar2 {
+height: 1em;
+}
+
+/* ============ tip ============ */
+p.tip em {
+	padding: 2px; 
+	background-color: #993300; 
+	color: #FFF;
+}
+/* ========== end tip ======= */
+
+
+/* =========== table ========= */
+.ajaxTable{
+	table-layout: fixed;
+	width: 100%;
+	background-color: white;
+}
+
+th { background-color: #993300;
+     font-size: 18px;
+     font-family: Arial, Helvetica, sans-serif;
+     color: #FFF;
+     cursor: pointer;
+}
+td { font-size: 14px;
+     font-family: Arial, Helvetica, sans-serif;
+     text-align: center;
+     padding: 0px;
+}
+
+tr.hoverableRow:hover td {
+   background-color: #E2D3B6;
+}
+
+/* ======== end table ========*/
+
+/* ========== drag-n-drop==========*/
+.draggable { width: 100px; height: 30px; padding: 0.5em; float: left; }
+.droppable { width: 150px; height: 35px; padding: 0.5em; float: left;  }
+
+/* ===== end drag-n-drop==========*/

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>OMJ final project</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<script src="scripts/jquery.js" type="text/javascript"></script>
+  	<script src="scripts/jquery-ui.custom.js" type="text/javascript"></script>
+  	<script src="./scripts/tablesorter.js" type="text/javascript" ></script>
+  	<script src="scripts/jquery_utils.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="container">
+    <div id="header">
+      <div id="title">
+        <h1>Hello world</h1>
+      </div>
+      <div id ="login">
+      	<h4>Log In / Register</h4>
+      </div>
+    </div>
+  	<div id="main">
+  		<div id="tabs-div">
+		  <ul>
+		  	<li><a href = "#home_tab">Home</a></li>
+		    <li><a href="#quiz_tab">Quiz</a></li>
+		    <li><a href="#results_tab">My Results</a></li>
+		    <li><a href="#tasks_tab">My tasks</a></li>
+			<li><a href="#panel3">For teacher</a></li>    
+		    <li><a href="#panel4">Reserved</a></li>
+		  </ul>
+		  <div id="home_tab">
+	        <h2>Structure</h2>
+	        <p>There are hardcoded question and answers for different topics and study years.
+	        Click button "generate question" to create another question with different multiple chose answers.
+	        Click button "generate quiz" to create another quiz from existing answers.
+	        Student can not do the same quiz two times, system propose him another quizzes with the same topic.</p>
+		   <h2>Log In</h2>
+		   <p>Everyone can see available quizzes. But only inlogged student can solve the quiz</p>
+		   <p>If noone is logged in, personal tabs with results and tasks are dissabled</p>
+	       <p class=tip>There is a student hardcoded in db with <em>login name=natalia password=111</em></p>
+	       <p>If student is logged in, tabs with personal tasks and results become enabled</p>
+	       <p class=tip>There is a teacher hardcoded in db with <em>login name=sciencekids password=111</em></p>
+	       <p>If teacher is logged in, tab for teacher become enabled</p>
+	       <h2>Tab Quiz</h2>
+	       <p>Initially all quizzes are shown in the table. They can be sorted asc and desc 
+	       		by clicking the corresponding table header. To show selected quizzes choose desired selection value
+	       		in the options lists</p>
+		  </div>
+		  <div id="quiz_tab">
+	       <table>
+			<tr>
+			<td>
+				<fieldset class = quiz><legend>Filter quizzes</legend>
+				<form action="#" id = "findQuiz" >
+	        	<table class = 'ajaxTable'>
+		        	<tr>
+		        		<td><select name="number" id=number></select></td>
+		        		<td><select name="thema" id=thema></select></td>
+		        		<td><select name="study_year" id=study_year></select></td>
+		        		<td><select name="number_questions" id=number_questions></select></td>
+		        	</tr>        	
+		        </table>
+		        </form>
+		        </fieldset>
+		        <div id="quizTable"></div>
+		     </td>
+		     </tr>
+		    </table>
+		  </div>
+		  <div id="results_tab">
+		    <p>Content for second panel.</p>
+		    <p>More info</p>		    
+		    <p>For group1 and group2.</p>
+		  </div>
+		  <div id="tasks_tab">
+		    <p>Content for second panel.</p>
+		    <p>More info</p>		    
+		    <p>For group1 and group2.</p>
+		  </div>
+		  <div id="panel3">
+		    <p>Content for second panel.</p>
+		    <p>More info</p><p>For group3 and group4.</p>
+		  </div>
+		  <div id="panel4">
+		    <p>Content for second panel.</p>
+		   <p>More info</p><p>For group3 and group4.</p>
+		  </div>
+		</div> <!-- end id=div-tabs -->
+  	</div><!-- end id=main -->
+</div> <!-- end id=container -->
+
+<!-- dialogs -->
+<div id="loginDialog" title="Log In or Register">
+	<div id="register_accordion">
+
+		  <h3>Log In</h3>
+		  		<form action=# id=loginForm>
+		  <div id="login_panel">
+		  <p class="validateTips"></p>
+			  <table>
+				    <tr>
+				    	<td> <label for="login_name">Name</label></td>
+						<td><input type="text" name="login_name" id="login_name" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+					<tr>
+						<td><label for="password">Password</label></td>
+						<td><input type="password" name="password" id="password" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+				</table>
+		  </div><!--  end login_panel -->
+		</form><!-- end loginForm -->
+
+		  <h3>Register</h3>
+		  		<form action=# id=registrationForm>
+		  <div id="register_panel">
+		  		<h2> This is registration form for students. If you are teacher, for registration ask your system administrator</h2>
+		    	<table>
+		    		<tr>
+				    	<td> <label for="first_name">First Name</label></td>
+						<td><input type="text" name="first_name" id="first_name" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+					 <tr>
+				    	<td> <label for="last_name">Last Name</label></td>
+						<td><input type="text" name="last_name" id="last_name" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+				    <tr>
+				    	<td> <label for="register_name">Login Name</label></td>
+						<td><input type="text" name="register_name" id="register_name" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+					<tr>
+						<td><label for="register_password">Password</label></td>
+						<td><input type="password" name="register_password" id="register_password" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+					<tr>
+				    	<td> <label for="study_year">Study Year</label></td>
+						<td><input type="text" name="study_year" id="study_year" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+					<tr>
+				    	<td> <label for="birthdate">Birth Date</label></td>
+						<td><input type="text" name="birthdate" id="birthdate" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+				</table>
+		  </div><!-- end register_panel -->
+	  </form><!-- end registrationForm -->
+	</div><!-- end register_accordion -->
+</div><!-- end loginDialog -->
+<div id="QuizSolutionDialog" title = "Solve Quiz">
+		  <div id = progress_quiz></div>
+		  <div id = progressbar1></div>
+		  <div id = progress_score></div>
+		  <div id = progressbar2></div>
+		  <div id = quiz_question></div>
+		  <div id = student_answer></div>
+</div>
+<div id="QuizFinishDialog" title = "Quiz done!">
+	<form>
+		  <div id = quiz_done></div>
+	</form>
+</div>
+<!-- end dialogs -->
+</body>
+</html>
