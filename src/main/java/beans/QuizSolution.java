@@ -57,4 +57,10 @@ public class QuizSolution extends Entity
 		if (this.answers == null) this.answers = new HashMap<>();
 		this.answers.put(question.getId(), answers);
 	}
+	
+	public int getScore()
+	{
+		int score = 0;
+		return score;
+	}
 }

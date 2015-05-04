@@ -16,6 +16,7 @@ service\QuestionAnswerUtils.class
 beans\Entity.class
 dao\ResultsDao.class
 service\QuizUtils.class
+beans\QuizSolution.class
 beans\Teacher.class
 dao\QuizDao.class
 persistence\DBmanager.class

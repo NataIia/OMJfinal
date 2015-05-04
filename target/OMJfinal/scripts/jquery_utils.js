@@ -105,10 +105,10 @@ function fillQuizzes()
 			  $().hover
 			  
 			//couple option selection with function
-			$('#number').change(sortQuizzes()); 
-			$('#thema').change(sortQuizzes());
-			$('#study_year').change(sortQuizzes());
-			$('#number_questions').change(sortQuizzes());
+			$('#number').change(sortQuizzes); 
+			$('#thema').change(sortQuizzes);
+			$('#study_year').change(sortQuizzes);
+			$('#number_questions').change(sortQuizzes);
 	      },
 	    error: function( error )
 	      {
@@ -137,6 +137,15 @@ function sortQuizzes()
 			 }
 			
 			htmlInsert("quizTable", getSortedTable(headings, rows, 'quizResult'));
+			
+			//sort table
+			$("#quizResult").tablesorter();
+			
+			//make cell clickable
+			  $('.clickableCell').click(function(e){openQuizSolutionDialog(e.target.innerHTML, 0)});
+			//add quiz info on hover
+			  $().hover;
+			  
 	      },
 	    error: function( error )
 	      {
