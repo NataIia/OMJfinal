@@ -9,6 +9,8 @@ dao\PersonDao.class
 beans\Entity.class
 dao\ResultsDao.class
 service\QuizUtils.class
+servlets\SelectSolutions.class
+service\SolutionUtils.class
 servlets\Solutions.class
 servlets\Quizzes.class
 servlets\Login.class

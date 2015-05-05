@@ -26,8 +26,7 @@ public class SelectQuizzes extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Pragma", "no-cache");
-		response.setContentType("text/javascript");
-		
+		response.setContentType("text/javascript");	
 		List<Quiz> quizzes = getQuizzes(request);
 		PrintWriter out = response.getWriter();
 		out.println(new JSONArray(quizzes));		

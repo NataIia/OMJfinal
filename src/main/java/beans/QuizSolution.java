@@ -11,7 +11,10 @@ public class QuizSolution extends Entity
 	private Quiz quiz;
 	private int score;
 	private Map<Question, List<String>> answers; // mapped array of student answers where Integer refers to questionID and List<String> refers to given answers array
-	private ArrayList<String> answersAsString; // prepare list for js 
+	// prepare list for js 
+	private ArrayList<String> answersAsString; 
+	private ArrayList<String> questionsAsString;
+	private ArrayList<String> correctAnswersAsString;
 
 	public QuizSolution(String thema, int id, Person author, Quiz quiz, Map<Question, List<String>> answers,
 			GregorianCalendar creationDate)
@@ -74,11 +77,39 @@ public class QuizSolution extends Entity
 		ArrayList<String> s = new ArrayList<>();
 		for (Map.Entry<Question, List<String>> entry : answers.entrySet())
 		{
-		    s.add(entry.getValue().get(0));
+		    s.add(entry.getValue().get(0) + ";");
 		}
 		return s;
 	}
 	
+	public ArrayList<String> getQuestionsAsString()
+	{
+		ArrayList<String> s = new ArrayList<>();
+		for (Question q : this.getQuiz().getQuestions())
+		{
+		    s.add(q.getQuestion());
+		}
+		return s;
+	}
+
+
+	public ArrayList<String> getCorrectAnswersAsString()
+	{
+		ArrayList<String> s = new ArrayList<>();
+		for (Question q : this.getQuiz().getQuestions())
+		{
+			String answer = "";
+			for (Answer a : q.getCorrectAnswer())
+			{
+				answer += (a.getTik() == null ? "" : (a.getTik() + " -> ")) + a.getTok() + ";";  
+			}
+				
+		    s.add(answer);
+		}
+		return s;
+	}
+
+
 	public int getScore()
 	{
 		int score = 0;
@@ -90,6 +121,7 @@ public class QuizSolution extends Entity
 	@Override
 	public String toString()
 	{
-		return "QuizSolution: quiz=" + quiz + "; answers=" + answers + super.toString();
+		return "QuizSolution: id=" + super.getId() + " quiz=" + quiz;
+//				+ "; answers=" + answers + super.toString();
 	}	
 }

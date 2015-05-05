@@ -40,17 +40,23 @@ public class CatalogsTest extends TestCase
 	
 	public void testAnswersLoad()
 	{
-		c.getAnswers().stream().forEach(System.out::println);
+		if ( c.getAnswers() == null) fail("Answers not yet implemented");
 	}
 	
 	public void testQuestionsLoad()
 	{
-		c.getQuestionTypes().stream().forEach(System.out::println);
-		c.getQuestions().stream().forEach(System.out::println);
+		if ( c.getQuestionTypes() == null) fail("Quiestion Types not yet implemented");
+		if ( c.getQuestions() == null) fail("Questions not yet implemented");
 	}
 	
 	public void testQuizzesLoad()
 	{
-		c.getQuizzes().stream().forEach(System.out::println);
+		if ( c.getQuizzes() == null) fail("Quizzes not yet implemented");
+	}
+	
+	public void testSolutionsLoad()
+	{
+		if ( c.getSolutions() == null) fail("Quizzes not yet implemented");
+//		c.getSolutions().stream().forEach(System.out :: println);
 	}
 }

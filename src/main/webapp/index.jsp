@@ -39,7 +39,7 @@
 		   <h2>Log In</h2>
 		   <p>Everyone can see available quizzes. But only inlogged student can solve the quiz</p>
 		   <p>If noone is logged in, personal tabs with results and tasks are dissabled</p>
-	       <p class=tip>There is a student hardcoded in db with <em>login name=natalia password=111</em></p>
+	       <p class=tip>There are a students hardcoded in db with <em>login name=natalia password=111</em> and <em>login name=student password=student</em></p>
 	       <p>If student is logged in, tabs with personal tasks and results become enabled</p>
 	       <p class=tip>There is a teacher hardcoded in db with <em>login name=sciencekids password=111</em></p>
 	       <p>If teacher is logged in, tab for teacher become enabled</p>
@@ -77,8 +77,8 @@
 				<form action="#" id = "findSolutions" >
 	        	<table class = 'ajaxTable'>
 		        	<tr>
-		        		<td><select name="number" id=numberSolution></select></td>
-		        		<td><select name="thema" id=themaSolution></select></td>
+		        		<td><select name="numberSolution" id=numberSolution></select></td>
+		        		<td><select name="themaSolution" id=themaSolution></select></td>
 		        		<td><select name="dateSolution" id=dateSolution></select></td>
 		        		<td><select name="scoreSolution" id=scoreSolution></select></td>
 		        	</tr>        	
@@ -96,8 +96,26 @@
 		    <p>For group1 and group2.</p>
 		  </div>
 		  <div id="teacher_results">
-		    <p>Content for second panel.</p>
-		    <p>More info</p><p>For group3 and group4.</p>
+		    <table>
+			<tr>
+			<td>
+				<fieldset class = quiz><legend>Filter results</legend>
+				<form action="#" id = "findSolutionsTeacher" >
+	        	<table class = 'ajaxTable'>
+		        	<tr>
+		        		<td><select name="numberSolutionTeacher" id=numberSolutionTeacher></select></td>
+		        		<td><select name="themaSolutionTeacher" id=themaSolutionTeacher></select></td>
+		        		<td><select name="dateSolutionTeacher" id=dateSolutionTeacher></select></td>
+		        		<td><select name="scoreSolutionTeacher" id=scoreSolutionTeacher></select></td>
+		        		<td><select name="studentSolutionTeacher" id=studentSolutionTeacher></select></td>
+		        	</tr>        	
+		        </table>
+		        </form>
+		        </fieldset>
+		        <div id="solutionsTableTeacher"></div>
+		     </td>
+		     </tr>
+		    </table>
 		  </div>
 		  <div id="teacher_tasks">
 		    <p>Content for second panel.</p>

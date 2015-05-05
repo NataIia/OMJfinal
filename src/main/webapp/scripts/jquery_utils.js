@@ -105,10 +105,10 @@ function fillQuizzes()
 			  $().hover
 			  
 			//couple option selection with function
-			$('#number').change(sortQuizzes); 
-			$('#thema').change(sortQuizzes);
-			$('#study_year').change(sortQuizzes);
-			$('#number_questions').change(sortQuizzes);
+			$('#number').change(selectQuizzes); 
+			$('#thema').change(selectQuizzes);
+			$('#study_year').change(selectQuizzes);
+			$('#number_questions').change(selectQuizzes);
 	      },
 	    error: function( error )
 	      {
@@ -119,7 +119,7 @@ function fillQuizzes()
 		});	
 }
 
-function sortQuizzes()
+function selectQuizzes()
 {
 	$.ajax({
 		type: "GET",
@@ -128,7 +128,6 @@ function sortQuizzes()
 		dataType: "json",
 		success: function(json)
 	      {
-			quizzes = json;
 			 var headings = ["Quiz ID", "Thema", "Study Year", "Number of questions"];
 			 var rows = [];
 			 for(var i = 1; i <= json.length; i++) 
@@ -165,6 +164,7 @@ function fillSolutionsForStudent()
 		dataType: "json",
 		success: function(json)
 	      {
+			
 			 var headings = ["Quiz ID", "Thema", "Date", "Score", "Question", "Correct answer", "Your answer"];
 			 var ids = [], rows = [], quiz_questions = []; correct_answers = [], student_answers = [];
 			 var themas = new Set(),  dates = new Set(), scores = new Set();
@@ -175,10 +175,13 @@ function fillSolutionsForStudent()
 			 for(var i = 1; i <= json.length; i++) 
 			 {
 				 var questions_as_string = [], correct_answers_as_string = [], student_answers_as_string = [];
-				 for (var q in findQuiz(json[i-1].id).questions)
+				 for (var q in json[i - 1].questionsAsString)
 					 {
-					 	questions_as_string.push(findQuiz(json[i-1].id).questions[q].question);
-					 	correct_answers_as_string.push(findQuiz(json[i-1].id).questions[q].correctAnswer[0].tok);
+					 	questions_as_string.push(json[i - 1].questionsAsString[q]);
+					 }
+				 for (var ca in json[i -1].correctAnswersAsString)
+					 {
+					 correct_answers_as_string.push(json[i -1].correctAnswersAsString[ca]);
 					 }
 				 for(var a in json[i-1].answersAsString)
 					 {
@@ -231,16 +234,63 @@ function fillSolutionsForStudent()
 			//sort table
 			$("#solutionsResult").tablesorter();
 			
-			//make cell clickable
-			  $('.clickableCell').click(function(e){openQuizSolutionDialog(e.target.innerHTML, 0)});
 			//add quiz info on hover
 			  $().hover
 			  
 			//couple option selection with function
-//			$('#number').change(sortQuizzes); 
-//			$('#thema').change(sortQuizzes);
-//			$('#study_year').change(sortQuizzes);
-//			$('#number_questions').change(sortQuizzes);
+			$('#numberSolution').change(selectSolutionsStudent); 
+			$('#themaSolution').change(selectSolutionsStudent);
+			$('#scoreSolution').change(selectSolutionsStudent);
+	      },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
+}
+
+function selectSolutionsStudent()
+{
+	$.ajax({
+		type: "GET",
+		url: "selectSolutionsStudent",
+		data: $("#findSolutions").serialize(),
+		dataType: "json",
+		success: function(json)
+	      {
+			var headings = ["Quiz ID", "Thema", "Date", "Score", "Question", "Correct answer", "Your answer"];
+			 var rows = [], quiz_questions = []; correct_answers = [], student_answers = [];
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 var questions_as_string = [], correct_answers_as_string = [], student_answers_as_string = [];
+				 for (var q in json[i - 1].questionsAsString)
+					 {
+					 	questions_as_string.push(json[i - 1].questionsAsString[q]);
+					 }
+				 for (var ca in json[i -1].correctAnswersAsString)
+					 {
+					 correct_answers_as_string.push(json[i -1].correctAnswersAsString[ca]);
+					 }
+				 for(var a in json[i-1].answersAsString)
+					 {
+					 	student_answers_as_string.push(json[i-1].answersAsString[a]);
+					 }
+				 quiz_questions[i-1] = getBulletedList(questions_as_string);
+				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
+				 student_answers[i-1] = getBulletedList(student_answers_as_string);
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+			 }
+			
+			htmlInsert("solutionsTable", getSortedTable(headings, rows, 'solutionsResult'));
+			
+			//sort table
+			$("#solutionsResult").tablesorter();
+			
+			//add quiz info on hover
+			  $().hover;
+			  
 	      },
 	    error: function( error )
 	      {
@@ -253,7 +303,97 @@ function fillSolutionsForStudent()
 
 function fillSolutionsForTeacher()
 {
-	
+	$.ajax({
+		type: "GET",
+		url: "solutions",
+		dataType: "json",
+		success: function(json)
+	      {
+			
+			 var headings = ["Quiz ID", "Thema", "Date", "Score", "Question", "Correct answer", "Your answer"];
+			 var ids = [], rows = [], quiz_questions = []; correct_answers = [], student_answers = [];
+			 var themas = new Set(),  dates = new Set(), scores = new Set();
+			 ids[0] = "Quiz ID";
+			 themas.add("Thema");
+			 dates.add("Date");
+			 scores.add("Score");
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 var questions_as_string = [], correct_answers_as_string = [], student_answers_as_string = [];
+				 for (var q in json[i - 1].questionsAsString)
+					 {
+					 	questions_as_string.push(json[i - 1].questionsAsString[q]);
+					 }
+				 for (var ca in json[i -1].correctAnswersAsString)
+					 {
+					 correct_answers_as_string.push(json[i -1].correctAnswersAsString[ca]);
+					 }
+				 for(var a in json[i-1].answersAsString)
+					 {
+					 	student_answers_as_string.push(json[i-1].answersAsString[a]);
+					 }
+				 quiz_questions[i-1] = getBulletedList(questions_as_string);
+				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
+				 student_answers[i-1] = getBulletedList(student_answers_as_string);
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+				 ids[i] = json[i-1].id;
+				 themas.add(json[i-1].thema);
+				 dates.add(json[i-1].date_solution);
+				 scores.add(json[i-1].score);
+			 }
+			var number = document.getElementById('numberSolution');
+			var thema = document.getElementById('themaSolution');
+			var date = document.getElementById('dateSolution');
+			var score = document.getElementById('scoreSolution');
+			for(var i = 0; i < ids.length; i++) 
+			{
+			    var optNumber = document.createElement('option');
+			    optNumber.innerHTML = ids[i];
+			    optNumber.value = ids[i];
+			    number.appendChild(optNumber);
+			}
+			
+			themas.forEach(function(value){
+				var optThema = document.createElement('option');
+				optThema.innerHTML = value;
+				optThema.value = value;
+				thema.appendChild(optThema);
+			});
+			
+			dates.forEach(function(value){
+				var optDate = document.createElement('option');
+				optDate.innerHTML = value;
+				optDate.value = value;
+				date.appendChild(optDate);
+			})
+			
+			scores.forEach(function(value){
+				var optScore = document.createElement('option');
+				optScore.innerHTML = value;
+				optScore.value = value;
+				score.appendChild(optScore);
+			})
+			
+			htmlInsert("solutionsTable", getSortedTable(headings, rows, 'solutionsResult'));
+			
+			//sort table
+			$("#solutionsResult").tablesorter();
+			
+			//add quiz info on hover
+			  $().hover
+			  
+			//couple option selection with function
+			$('#numberSolution').change(selectSolutionsStudent); 
+			$('#themaSolution').change(selectSolutionsStudent);
+			$('#scoreSolution').change(selectSolutionsStudent);
+	      },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
 }
 
 //***************Dialog Windows Functions **********************
@@ -754,15 +894,4 @@ function getBulletedList(listItems)
 	return(list);
 }
 
-function findQuiz(quizId)
-{
-	for (i = 0; i < quizzes.length; i++)
-		{
-			if (quizzes[i].id == quizId)
-				{
-					return quizzes[i];
-				}
-			else return null;
-		}
-}
 //*********** end utils

@@ -27,10 +27,17 @@ public class Solutions extends HttpServlet
 		response.setContentType("text/javascript");
 		ArrayList<QuizSolution> solutions = new ArrayList<>();
 		PrintWriter out = response.getWriter();
-		int idStudent = Integer.parseInt(request.getParameter("id"));
-		Catalogs.get().getSolutions().stream()
-					.filter(s -> (s.getAuthor().getId() == idStudent))
-					.forEach(s -> solutions.add(s));
+		if (request.getParameterMap().containsKey("id"))
+		{
+			int idStudent = Integer.parseInt(request.getParameter("id"));
+			Catalogs.get().getSolutions().stream()
+										.filter(s -> (s.getAuthor().getId() == idStudent))
+										.forEach(s -> solutions.add(s));
+		}
+		else
+		{
+			Catalogs.get().getSolutions().stream().forEach(s -> solutions.add(s));
+		}
 		out.println(new JSONArray(solutions));
 	}
 
