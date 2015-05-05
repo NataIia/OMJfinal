@@ -166,7 +166,7 @@ function fillSolutionsForStudent()
 		success: function(json)
 	      {
 			 var headings = ["Quiz ID", "Thema", "Date", "Score", "Question", "Correct answer", "Your answer"];
-			 var ids = [], rows = [], correct_answers = [], student_answers = [];
+			 var ids = [], rows = [], quiz_questions = []; correct_answers = [], student_answers = [];
 			 var themas = new Set(),  dates = new Set(), scores = new Set();
 			 ids[0] = "Quiz ID";
 			 themas.add("Thema");
@@ -174,8 +174,20 @@ function fillSolutionsForStudent()
 			 scores.add("Score");
 			 for(var i = 1; i <= json.length; i++) 
 			 {
-//				 correct_answers[i-1] = getBulletedList(json.answers.values);
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score]];
+				 var questions_as_string = [], correct_answers_as_string = [], student_answers_as_string = [];
+				 for (var q in findQuiz(json[i-1].id).questions)
+					 {
+					 	questions_as_string.push(findQuiz(json[i-1].id).questions[q].question);
+					 	correct_answers_as_string.push(findQuiz(json[i-1].id).questions[q].correctAnswer[0].tok);
+					 }
+				 for(var a in json[i-1].answersAsString)
+					 {
+					 	student_answers_as_string.push(json[i-1].answersAsString[a]);
+					 }
+				 quiz_questions[i-1] = getBulletedList(questions_as_string);
+				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
+				 student_answers[i-1] = getBulletedList(student_answers_as_string);
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
 				 ids[i] = json[i-1].id;
 				 themas.add(json[i-1].thema);
 				 dates.add(json[i-1].date_solution);
@@ -740,5 +752,17 @@ function getBulletedList(listItems)
 	}
 	list = list + "</ul>"
 	return(list);
+}
+
+function findQuiz(quizId)
+{
+	for (i = 0; i < quizzes.length; i++)
+		{
+			if (quizzes[i].id == quizId)
+				{
+					return quizzes[i];
+				}
+			else return null;
+		}
 }
 //*********** end utils
