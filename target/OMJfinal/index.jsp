@@ -107,6 +107,7 @@
 		        		<td><select name="themaSolutionTeacher" id=themaSolutionTeacher></select></td>
 		        		<td><select name="dateSolutionTeacher" id=dateSolutionTeacher></select></td>
 		        		<td><select name="scoreSolutionTeacher" id=scoreSolutionTeacher></select></td>
+		        		<td><select name="studentSolutionTeacher" id=studentSolutionTeacher></select></td>
 		        	</tr>        	
 		        </table>
 		        </form>

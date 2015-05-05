@@ -118,8 +118,23 @@
 		    </table>
 		  </div>
 		  <div id="teacher_tasks">
-		    <p>Content for second panel.</p>
-		   <p>More info</p><p>For group3 and group4.</p>
+		    <table>
+			<tr>
+			<td>
+				<fieldset class = quiz><legend>Filter results</legend>
+				<form action="#" id = "taskTeacher" >
+	        	<table class = 'ajaxTable'>
+		        	<tr>
+		        		<td><select name="taskPersonTeacher" id=taskPersonTeacher></select></td>
+		        		<td><select name="taskQuizTeacher" id=taskQuizTeacher></select></td>
+		        	</tr>        	
+		        </table>
+		        </form>
+		        </fieldset>
+		        <div id="tasksTableTeacher"></div>
+		     </td>
+		     </tr>
+		    </table>
 		  </div>
 		</div> <!-- end id=div-tabs -->
   	</div><!-- end id=main -->

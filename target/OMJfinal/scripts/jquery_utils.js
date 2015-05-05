@@ -310,41 +310,28 @@ function fillSolutionsForTeacher()
 		success: function(json)
 	      {
 			
-			 var headings = ["Quiz ID", "Thema", "Date", "Score", "Question", "Correct answer", "Your answer"];
-			 var ids = [], rows = [], quiz_questions = []; correct_answers = [], student_answers = [];
-			 var themas = new Set(),  dates = new Set(), scores = new Set();
+			 var headings = ["Quiz ID", "Thema", "Date", "Score", "Student"];
+			 var ids = [], rows = [];
+			 var themas = new Set(),  dates = new Set(), scores = new Set(), students = new Set();
 			 ids[0] = "Quiz ID";
 			 themas.add("Thema");
 			 dates.add("Date");
 			 scores.add("Score");
+			 students.add("Student");
 			 for(var i = 1; i <= json.length; i++) 
 			 {
-				 var questions_as_string = [], correct_answers_as_string = [], student_answers_as_string = [];
-				 for (var q in json[i - 1].questionsAsString)
-					 {
-					 	questions_as_string.push(json[i - 1].questionsAsString[q]);
-					 }
-				 for (var ca in json[i -1].correctAnswersAsString)
-					 {
-					 correct_answers_as_string.push(json[i -1].correctAnswersAsString[ca]);
-					 }
-				 for(var a in json[i-1].answersAsString)
-					 {
-					 	student_answers_as_string.push(json[i-1].answersAsString[a]);
-					 }
-				 quiz_questions[i-1] = getBulletedList(questions_as_string);
-				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
-				 student_answers[i-1] = getBulletedList(student_answers_as_string);
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], json[i-1].author.firstName + " " + json[i-1].author.secondName];
 				 ids[i] = json[i-1].id;
 				 themas.add(json[i-1].thema);
 				 dates.add(json[i-1].date_solution);
 				 scores.add(json[i-1].score);
+				 students.add(json[i-1].author.firstName + " " + json[i-1].author.secondName)
 			 }
-			var number = document.getElementById('numberSolution');
-			var thema = document.getElementById('themaSolution');
-			var date = document.getElementById('dateSolution');
-			var score = document.getElementById('scoreSolution');
+			var number = document.getElementById('numberSolutionTeacher');
+			var thema = document.getElementById('themaSolutionTeacher');
+			var date = document.getElementById('dateSolutionTeacher');
+			var score = document.getElementById('scoreSolutionTeacher');
+			var st = document.getElementById('studentSolutionTeacher');
 			for(var i = 0; i < ids.length; i++) 
 			{
 			    var optNumber = document.createElement('option');
@@ -365,27 +352,34 @@ function fillSolutionsForTeacher()
 				optDate.innerHTML = value;
 				optDate.value = value;
 				date.appendChild(optDate);
-			})
+			});
 			
 			scores.forEach(function(value){
 				var optScore = document.createElement('option');
 				optScore.innerHTML = value;
 				optScore.value = value;
 				score.appendChild(optScore);
-			})
+			});
+				
+			students.forEach(function(value){
+				var optSt = document.createElement('option');
+				optSt.innerHTML = value;
+				optSt.value = value;
+				st.appendChild(optSt);
+			});
 			
-			htmlInsert("solutionsTable", getSortedTable(headings, rows, 'solutionsResult'));
+			htmlInsert("solutionsTableTeacher", getSortedTable(headings, rows, 'solutionsResultTeacher'));
 			
 			//sort table
-			$("#solutionsResult").tablesorter();
+			$("#solutionsResultTeacher").tablesorter();
 			
 			//add quiz info on hover
-			  $().hover
+			  $().hover;
 			  
 			//couple option selection with function
-			$('#numberSolution').change(selectSolutionsStudent); 
-			$('#themaSolution').change(selectSolutionsStudent);
-			$('#scoreSolution').change(selectSolutionsStudent);
+//			$('#numberSolution').change(selectSolutionsStudent); 
+//			$('#themaSolution').change(selectSolutionsStudent);
+//			$('#scoreSolution').change(selectSolutionsStudent);
 	      },
 	    error: function( error )
 	      {

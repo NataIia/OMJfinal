@@ -16,6 +16,7 @@ import beans.QuestionType;
 import beans.Quiz;
 import beans.QuizSolution;
 import beans.Student;
+import beans.Task;
 import beans.Teacher;
 import dao.Idao;
 
@@ -30,6 +31,7 @@ public class Catalogs implements Idao
 	private ArrayList<Student> students;
 	private ArrayList<QuestionType> questionTypes;
 	private ArrayList<QuizSolution> solutions;
+	private ArrayList<Task> tasks;
 	
 	
 	
@@ -42,6 +44,7 @@ public class Catalogs implements Idao
 		setQuestions();
 		setQuizzes();
 		setSolutions();
+		setTasks();
 	}
 	
 	public static Catalogs get()
@@ -304,6 +307,38 @@ public class Catalogs implements Idao
 		System.exit(1);
 		}
 	}
+	
+	public void setTasks()
+	{
+		if (tasks == null) tasks = new ArrayList<>();
+		
+		String query = "select * from omj_final.tbl_task";
+		
+		try
+		{
+		Statement statement = connection.createStatement();
+		ResultSet rs = statement.executeQuery(query);
+		GregorianCalendar creationDate = new GregorianCalendar();
+		while (rs.next())
+			{
+				int idStudent = rs.getInt("student");
+				int idQuiz = rs.getInt("quiz");
+				int idTeacher = rs.getInt("author");
+				creationDate.setTimeInMillis(rs.getDate("date_creation").getTime());
+				tasks.add(new Task(rs.getInt("id"),
+						quizzes.stream().filter(q -> (q.getId() == idQuiz)).findFirst().get(),
+						students.stream().filter(s -> (s.getId() == idStudent)).findFirst().get(),
+						rs.getString("status"),
+						teachers.stream().filter(t -> (t.getId() == idTeacher)).findFirst().get(),
+						quizzes.stream().filter(q -> (q.getId() == idQuiz)).findFirst().get().getThema(),
+						creationDate)); 
+			}
+		} catch (SQLException e)
+		{
+		e.printStackTrace();
+		System.exit(1);
+		}
+	}
 
 	/**
 	 * @return the questions
@@ -435,6 +470,16 @@ public class Catalogs implements Idao
 	public void saveSolutions(ArrayList<QuizSolution> solutions)
 	{
 		this.solutions = solutions;
+	}
+
+	public ArrayList<Task> getTasks()
+	{
+		return tasks;
+	}
+
+	public void saveTasks(ArrayList<Task> tasks)
+	{
+		this.tasks = tasks;
 	}
 
 	public void saveCatalogs()
