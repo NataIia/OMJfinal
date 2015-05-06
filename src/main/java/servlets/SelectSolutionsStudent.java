@@ -18,7 +18,7 @@ import beans.QuizSolution;
 import service.SolutionUtils;
 
 @WebServlet ("/selectSolutionsStudent")
-public class SelectSolutions extends HttpServlet
+public class SelectSolutionsStudent extends HttpServlet
 {
 	private SolutionUtils util = new SolutionUtils();
 	

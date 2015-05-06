@@ -328,7 +328,7 @@ public class Catalogs implements Idao
 				tasks.add(new Task(rs.getInt("id"),
 						quizzes.stream().filter(q -> (q.getId() == idQuiz)).findFirst().get(),
 						students.stream().filter(s -> (s.getId() == idStudent)).findFirst().get(),
-						rs.getString("status"),
+						rs.getString("task_status"),
 						teachers.stream().filter(t -> (t.getId() == idTeacher)).findFirst().get(),
 						quizzes.stream().filter(q -> (q.getId() == idQuiz)).findFirst().get().getThema(),
 						creationDate)); 

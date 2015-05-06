@@ -3,6 +3,7 @@ D:\development\jwf\OMJfinal\src\main\java\service\QuizUtils.java
 D:\development\jwf\OMJfinal\src\main\java\servlets\package-info.java
 D:\development\jwf\OMJfinal\src\main\java\servlets\SelectQuizzes.java
 D:\development\jwf\OMJfinal\src\main\java\beans\package-info.java
+D:\development\jwf\OMJfinal\src\main\java\beans\Task.java
 D:\development\jwf\OMJfinal\src\main\java\service\QuizQuestionUtils.java
 D:\development\jwf\OMJfinal\src\main\java\dao\ResultsDao.java
 D:\development\jwf\OMJfinal\src\main\java\beans\Person.java
@@ -12,7 +13,6 @@ D:\development\jwf\OMJfinal\src\main\java\servlets\Quizzes.java
 D:\development\jwf\OMJfinal\src\main\java\dao\QuizDao.java
 D:\development\jwf\OMJfinal\src\main\java\beans\Teacher.java
 D:\development\jwf\OMJfinal\src\main\java\persistence\Catalogs.java
-D:\development\jwf\OMJfinal\src\main\java\servlets\SelectSolutions.java
 D:\development\jwf\OMJfinal\src\main\java\beans\Entity.java
 D:\development\jwf\OMJfinal\src\main\java\servlets\Solutions.java
 D:\development\jwf\OMJfinal\src\main\java\beans\QuestionType.java
@@ -22,6 +22,7 @@ D:\development\jwf\OMJfinal\src\main\java\beans\Student.java
 D:\development\jwf\OMJfinal\src\main\java\service\QuestionAnswerUtils.java
 D:\development\jwf\OMJfinal\src\main\java\servlets\CheckAnswer.java
 D:\development\jwf\OMJfinal\src\main\java\dao\PersonDao.java
+D:\development\jwf\OMJfinal\src\main\java\servlets\SelectSolutionsStudent.java
 D:\development\jwf\OMJfinal\src\main\java\persistence\DBmanager.java
 D:\development\jwf\OMJfinal\src\main\java\servlets\DBconnect.java
 D:\development\jwf\OMJfinal\src\main\java\dao\package-info.java

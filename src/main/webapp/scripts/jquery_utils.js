@@ -311,17 +311,17 @@ function fillSolutionsForTeacher()
 	      {
 			
 			 var headings = ["Quiz ID", "Thema", "Date", "Score", "Student"];
-			 var ids = [], rows = [];
-			 var themas = new Set(),  dates = new Set(), scores = new Set(), students = new Set();
-			 ids[0] = "Quiz ID";
+			 var rows = [];
+			 var ids = new Set(), themas = new Set(),  dates = new Set(), scores = new Set(), students = new Set();
+			 ids.add("Quiz ID");
 			 themas.add("Thema");
 			 dates.add("Date");
 			 scores.add("Score");
 			 students.add("Student");
 			 for(var i = 1; i <= json.length; i++) 
 			 {
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], json[i-1].author.firstName + " " + json[i-1].author.secondName];
-				 ids[i] = json[i-1].id;
+				 rows[i-1] = [json[i-1].quiz.id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], json[i-1].author.firstName + " " + json[i-1].author.secondName];
+				 ids.add(json[i-1].quiz.id);
 				 themas.add(json[i-1].thema);
 				 dates.add(json[i-1].date_solution);
 				 scores.add(json[i-1].score);
@@ -332,13 +332,13 @@ function fillSolutionsForTeacher()
 			var date = document.getElementById('dateSolutionTeacher');
 			var score = document.getElementById('scoreSolutionTeacher');
 			var st = document.getElementById('studentSolutionTeacher');
-			for(var i = 0; i < ids.length; i++) 
-			{
+
+			ids.forEach(function(value){
 			    var optNumber = document.createElement('option');
-			    optNumber.innerHTML = ids[i];
-			    optNumber.value = ids[i];
+			    optNumber.innerHTML = value;
+			    optNumber.value = value;
 			    number.appendChild(optNumber);
-			}
+			});
 			
 			themas.forEach(function(value){
 				var optThema = document.createElement('option');
@@ -377,9 +377,11 @@ function fillSolutionsForTeacher()
 			  $().hover;
 			  
 			//couple option selection with function
-//			$('#numberSolution').change(selectSolutionsStudent); 
-//			$('#themaSolution').change(selectSolutionsStudent);
-//			$('#scoreSolution').change(selectSolutionsStudent);
+//			$('#numberSolutionTeacher').change(selectSolutionTeacher); 
+//			$('#themaSolutionTeacher').change(selectSolutionTeacher);
+//			$('#dateSolutionTeacher').change(selectSolutionTeacher);
+//			$('#scoreSolutionTeacher').change(selectSolutionTeacher);
+//			$('#studentSolutionTeacher').change(selectSolutionTeacher);
 	      },
 	    error: function( error )
 	      {
@@ -388,6 +390,56 @@ function fillSolutionsForTeacher()
 
 	      }
 		});	
+}
+
+function selectSolutionTeacher()
+{
+	$.ajax({
+		type: "GET",
+		url: "selectSolutionsStudent",
+		data: $("#findSolutionsTeacher").serialize(),
+		dataType: "json",
+		success: function(json)
+	      {
+			var headings = ["Quiz ID", "Thema", "Date", "Score", "Question", "Correct answer", "Your answer"];
+			 var rows = [], quiz_questions = []; correct_answers = [], student_answers = [];
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 var questions_as_string = [], correct_answers_as_string = [], student_answers_as_string = [];
+				 for (var q in json[i - 1].questionsAsString)
+					 {
+					 	questions_as_string.push(json[i - 1].questionsAsString[q]);
+					 }
+				 for (var ca in json[i -1].correctAnswersAsString)
+					 {
+					 correct_answers_as_string.push(json[i -1].correctAnswersAsString[ca]);
+					 }
+				 for(var a in json[i-1].answersAsString)
+					 {
+					 	student_answers_as_string.push(json[i-1].answersAsString[a]);
+					 }
+				 quiz_questions[i-1] = getBulletedList(questions_as_string);
+				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
+				 student_answers[i-1] = getBulletedList(student_answers_as_string);
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+			 }
+			
+			htmlInsert("solutionsTable", getSortedTable(headings, rows, 'solutionsResult'));
+			
+			//sort table
+			$("#solutionsResult").tablesorter();
+			
+			//add quiz info on hover
+			  $().hover;
+			  
+	      },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});
 }
 
 //***************Dialog Windows Functions **********************

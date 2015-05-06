@@ -121,7 +121,7 @@
 		    <table>
 			<tr>
 			<td>
-				<fieldset class = quiz><legend>Filter results</legend>
+				<fieldset class = quiz><legend>Assign task to Student</legend>
 				<form action="#" id = "taskTeacher" >
 	        	<table class = 'ajaxTable'>
 		        	<tr>
