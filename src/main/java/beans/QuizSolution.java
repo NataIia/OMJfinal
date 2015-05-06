@@ -72,6 +72,107 @@ public class QuizSolution extends Entity
 		this.answers.put(question, a);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((answers == null) ? 0 : answers.hashCode());
+		result = prime * result
+				+ ((answersAsString == null) ? 0 : answersAsString.hashCode());
+		result = prime
+				* result
+				+ ((correctAnswersAsString == null) ? 0
+						: correctAnswersAsString.hashCode());
+		result = prime
+				* result
+				+ ((questionsAsString == null) ? 0 : questionsAsString
+						.hashCode());
+		result = prime * result + ((quiz == null) ? 0 : quiz.hashCode());
+		result = prime * result + score;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (!super.equals(obj))
+		{
+			return false;
+		}
+		if (!(obj instanceof QuizSolution))
+		{
+			return false;
+		}
+		QuizSolution other = (QuizSolution) obj;
+		if (!super.equals(obj)) return false;
+		if (answers == null)
+		{
+			if (other.answers != null)
+			{
+				return false;
+			}
+		} else if (!answers.equals(other.answers))
+		{
+			return false;
+		}
+		if (answersAsString == null)
+		{
+			if (other.answersAsString != null)
+			{
+				return false;
+			}
+		} else if (!answersAsString.equals(other.answersAsString))
+		{
+			return false;
+		}
+		if (correctAnswersAsString == null)
+		{
+			if (other.correctAnswersAsString != null)
+			{
+				return false;
+			}
+		} else if (!correctAnswersAsString.equals(other.correctAnswersAsString))
+		{
+			return false;
+		}
+		if (questionsAsString == null)
+		{
+			if (other.questionsAsString != null)
+			{
+				return false;
+			}
+		} else if (!questionsAsString.equals(other.questionsAsString))
+		{
+			return false;
+		}
+		if (quiz == null)
+		{
+			if (other.quiz != null)
+			{
+				return false;
+			}
+		} else if (!quiz.equals(other.quiz))
+		{
+			return false;
+		}
+		if (score != other.score)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	public ArrayList<String> getAnswersAsString()
 	{
 		ArrayList<String> s = new ArrayList<>();
@@ -121,7 +222,7 @@ public class QuizSolution extends Entity
 	@Override
 	public String toString()
 	{
-		return "QuizSolution: id=" + super.getId() + " quiz=" + quiz;
+		return "QuizSolution: id=" + super.getId() + " student=" + super.getAuthor();
 //				+ "; answers=" + answers + super.toString();
 	}	
 }

@@ -105,7 +105,6 @@
 		        	<tr>
 		        		<td><select name="numberSolutionTeacher" id=numberSolutionTeacher></select></td>
 		        		<td><select name="themaSolutionTeacher" id=themaSolutionTeacher></select></td>
-		        		<td><select name="dateSolutionTeacher" id=dateSolutionTeacher></select></td>
 		        		<td><select name="scoreSolutionTeacher" id=scoreSolutionTeacher></select></td>
 		        		<td><select name="studentSolutionTeacher" id=studentSolutionTeacher></select></td>
 		        	</tr>        	
@@ -126,12 +125,15 @@
 	        	<table class = 'ajaxTable'>
 		        	<tr>
 		        		<td><select name="taskPersonTeacher" id=taskPersonTeacher></select></td>
-		        		<td><select name="taskQuizTeacher" id=taskQuizTeacher></select></td>
+		        		<td><select name="taskQuizTeacher" id=taskQuizTeacher></select></td>		        		
+		        		<td><select name="taskStatusTeacher" id=taskStatusTeacher></select></td>
+		        		<td><input type="button" value="Assign" id = "assignQuizStudent"/></td>
 		        	</tr>        	
 		        </table>
 		        </form>
+		        <fieldset class = quiz><legend>Assigned tasks to Student</legend>
+		        	<div id="tasksTableTeacher"></div>
 		        </fieldset>
-		        <div id="tasksTableTeacher"></div>
 		     </td>
 		     </tr>
 		    </table>

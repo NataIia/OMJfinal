@@ -17,6 +17,8 @@ servlets\Quizzes.class
 servlets\Login.class
 persistence\Catalogs.class
 service\QuizQuestionUtils.class
+servlets\Tasks.class
+servlets\SelectSolutionsTeacher.class
 beans\Answer.class
 beans\Student.class
 service\QuestionAnswerUtils.class

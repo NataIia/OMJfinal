@@ -138,6 +138,9 @@ tr.hoverableRow:hover td {
    background-color: #E2D3B6;
 }
 
+#assignQuizStudent{
+	width: 100%
+}
 /* ======== end table ========*/
 
 /* ========== drag-n-drop==========*/

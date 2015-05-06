@@ -13,7 +13,7 @@ public class SolutionUtils
 		if (id != null && !id.equals("") && !id.equals("Quiz ID"))
 			Catalogs.get().getSolutions()
 						.stream()
-						.filter(solution -> solution.getId() == Integer.parseInt(id))
+						.filter(solution -> solution.getQuiz().getId() == Integer.parseInt(id))
 						.forEach(solution -> solutions.add(solution));
 		return solutions;
 	}
@@ -40,14 +40,17 @@ public class SolutionUtils
 		return solutions;
 	}
 	
-	public ArrayList<QuizSolution> findQuizSolutionByStudent(String studentId)
+	public ArrayList<QuizSolution> findQuizSolutionByStudent(String student)
 	{
 		ArrayList<QuizSolution> solutions = new ArrayList<>();
-		if (studentId != null && !studentId.equals("") && !studentId.equals("Student ID"))
+		if (student != null && !student.equals("") && !student.equals("Student"))
+		{
+			int studentId = Integer.parseInt(student.split("=")[1]);
 			Catalogs.get().getSolutions()
 						.stream()
-						.filter(solution -> solution.getAuthor().getId() == Integer.parseInt(studentId))
+						.filter(solution -> (solution.getAuthor().getId() == studentId))
 						.forEach(solution -> solutions.add(solution));
+		}
 		return solutions;
 	}
 }
