@@ -190,7 +190,7 @@ function fillSolutionsForStudent()
 				 quiz_questions[i-1] = getBulletedList(questions_as_string);
 				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
 				 student_answers[i-1] = getBulletedList(student_answers_as_string);
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].date, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
 				 ids[i] = json[i-1].id;
 				 themas.add(json[i-1].thema);
 				 dates.add(json[i-1].date_solution);
@@ -280,7 +280,7 @@ function selectSolutionsStudent()
 				 quiz_questions[i-1] = getBulletedList(questions_as_string);
 				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
 				 student_answers[i-1] = getBulletedList(student_answers_as_string);
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].date, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
 			 }
 			
 			htmlInsert("solutionsTable", getSortedTable(headings, rows, 'solutionsResult'));
@@ -321,7 +321,7 @@ function fillSolutionsForTeacher()
 			 students.add("Student");
 			 for(var i = 1; i <= json.length; i++) 
 			 {
-				 rows[i-1] = [json[i-1].quiz.id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], json[i-1].author.firstName + " " + json[i-1].author.secondName];
+				 rows[i-1] = [json[i-1].quiz.id, [json[i-1].thema], json[i-1].date, [json[i-1].score], json[i-1].author.firstName + " " + json[i-1].author.secondName];
 				 ids.add(json[i-1].quiz.id);
 				 themas.add(json[i-1].thema);
 				 scores.add(json[i-1].score);
@@ -398,7 +398,7 @@ function selectSolutionTeacher()
 			 
 			 for(var i = 1; i <= json.length; i++) 
 			 {
-				 rows[i-1] = [json[i-1].quiz.id, [json[i-1].thema], json[i-1].creationDate.time, [json[i-1].score], json[i-1].author.firstName + " " + json[i-1].author.secondName];
+				 rows[i-1] = [json[i-1].quiz.id, [json[i-1].thema], json[i-1].date, [json[i-1].score], json[i-1].author.firstName + " " + json[i-1].author.secondName];
 			 }
 						
 			htmlInsert("solutionsTableTeacher", getSortedTable(headings, rows, 'solutionsResultTeacher'));
@@ -476,10 +476,9 @@ function fillTasksForTeacher()
 			  $().hover;
 			  
 			//couple option selection with function
-			$('#numberSolutionTeacher').change(selectSolutionTeacher); 
-			$('#themaSolutionTeacher').change(selectSolutionTeacher);
-			$('#scoreSolutionTeacher').change(selectSolutionTeacher);
-			$('#studentSolutionTeacher').change(selectSolutionTeacher);
+			$('#taskQuizTeacher').change(selectTaskTeacher); 
+			$('#taskPersonTeacher').change(selectTaskTeacher);
+			$('#taskStatusTeacher').change(selectTaskTeacher);
 	      },
 	    error: function( error )
 	      {
@@ -488,6 +487,11 @@ function fillTasksForTeacher()
 
 	      }
 		});	
+}
+
+function selectTaskTeacher()
+{
+	
 }
 
 //***************Dialog Windows Functions **********************

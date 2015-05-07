@@ -1,6 +1,8 @@
 package beans;
 
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * abstract class with common properties for quiz, question and answer
@@ -16,6 +18,7 @@ public abstract class Entity
 	private int id;
 	private Person author;
 	private GregorianCalendar creationDate;
+	private String date; // creation date in string format to pass js
 
 	
 	
@@ -91,6 +94,12 @@ public abstract class Entity
 	public void setCreationDate(GregorianCalendar creationDate)
 	{
 		this.creationDate = creationDate;
+	}
+
+	public String getDate()
+	{
+		SimpleDateFormat string = new SimpleDateFormat("d MMMM yyyy");
+		return string.format(this.creationDate.getTime()).toString();
 	}
 
 	/* (non-Javadoc)
