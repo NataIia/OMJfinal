@@ -91,10 +91,27 @@
 		    </table>
 		  </div>
 		  <div id="tasks_tab">
-		    <p>Content for second panel.</p>
-		    <p>More info</p>		    
-		    <p>For group1 and group2.</p>
-		  </div>
+		    <table>
+			<tr>
+			<td>
+				<fieldset class = quiz><legend>Assign task to Student</legend>
+				<form action="#" id = "taskStudent" >
+	        	<table class = 'ajaxTable'>
+		        	<tr>
+		        		<td><select name="taskQuizStudent" id=taskQuizStudent></select></td>		        		
+		        		<td><select name="taskThemaStudent" id=taskThemaStudent></select></td>
+		        		<td><select name="taskStatusStudent" id=taskStatusStudent></select></td>
+		        	</tr>        	
+		        </table>
+		        </form>
+		        </fieldset>
+		        <fieldset class = quiz><legend>Assigned tasks to Student</legend>
+		        	<div id="tasksTableStudent"></div>
+		        </fieldset>
+		     </td>
+		     </tr>
+		    </table>
+		  </div><!-- end tasks_tab -->
 		  <div id="teacher_results">
 		    <table>
 			<tr>
@@ -131,13 +148,14 @@
 		        	</tr>        	
 		        </table>
 		        </form>
+		        </fieldset>
 		        <fieldset class = quiz><legend>Assigned tasks to Student</legend>
 		        	<div id="tasksTableTeacher"></div>
 		        </fieldset>
 		     </td>
 		     </tr>
 		    </table>
-		  </div>
+		  </div><!-- end teacher_tasks -->
 		</div> <!-- end id=div-tabs -->
   	</div><!-- end id=main -->
 </div> <!-- end id=container -->

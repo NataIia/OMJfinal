@@ -302,7 +302,110 @@ function selectSolutionsStudent()
 }
 
 function fillTasksForStudent()
-{}
+{
+	$.ajax({
+		type: "GET",
+		url: "tasks",
+		dataType: "json",
+		success: function(json) 
+		{
+			var headings = [ "Quiz ID", "Thema", "Status"];
+			 var rows = [];
+			 var ids = new Set(), themas = new Set(), statuses = new Set();
+			 ids.add("Quiz ID");
+			 themas.add("Thema");
+			 statuses.add("Status");
+		
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 rows[i-1] = [json[i-1].quiz.id , json[i-1].thema, json[i-1].status];
+				 ids.add(json[i-1].quiz.id);
+				 statuses.add(json[i-1].status);
+				 themas.add(json[i-1].quiz.thema);
+			 }
+			var number = document.getElementById('taskQuizStudent');
+			var thema = document.getElementById('taskThemaStudent');
+			var status = document.getElementById('taskStatusStudent');
+		
+			ids.forEach(function(value){
+			    var optNumber = document.createElement('option');
+			    optNumber.innerHTML = value;
+			    optNumber.value = value;
+			    number.appendChild(optNumber);
+			});
+			
+			themas.forEach(function(value){
+				var optThema = document.createElement('option');
+				optThema.innerHTML = value;
+				optThema.value = value;
+				thema.appendChild(optThema);
+			});
+			
+			statuses.forEach(function(value){
+				var optStatus = document.createElement('option');
+				optStatus.innerHTML = value;
+				optStatus.value = value;
+				status.appendChild(optStatus);
+			});
+			
+			htmlInsert("tasksTableStudent", getSortedTable(headings, rows, 'tasksResultStudent'));
+			
+			//sort table
+			$("#tasksResultStudent").tablesorter();
+			
+			//make cell clickable
+			  $('.clickableCell').click(function(e){openQuizSolutionDialog(e.target.innerHTML, 0)});
+			
+			//add quiz info on hover
+			  $().hover;
+			  
+			//couple option selection with function
+			$('#taskQuizStudent').change(selectTaskStudent); 
+			$('#taskThemaStudent').change(selectTaskStudent);
+			$('#taskStatusStudent').change(selectTaskStudent);
+			
+		 },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
+}
+
+function selectTaskStudent()
+{
+	$.ajax({
+		type: "GET",
+		url: "selectTasksStudent",
+		data: $('#taskStudent').serialize() + "&student=" + student.id,
+		dataType: "json",
+		success: function(json)
+	      {
+			 var headings = ["Student", "Quiz ID", "Status"];
+			 var rows = [];
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 rows[i-1] = [json[i-1].quiz.id , json[i-1].thema, json[i-1].status];
+			 }
+			
+			htmlInsert("tasksTableStudent", getSortedTable(headings, rows, 'tasksResultStudent'));
+			
+			//sort table
+			$("#tasksResultStudent").tablesorter();
+			
+			//add quiz info on hover
+			  $().hover;
+	      },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
+}
 
 function fillSolutionsForTeacher()
 {
@@ -425,23 +528,33 @@ function fillTasksForTeacher()
 		type: "GET",
 		url: "tasks",
 		dataType: "json",
-		success: function(json)
-	      {
-			 var headings = ["Student", "Quiz ID", "Status", "Modify"];
+		success: function(json) 
+		{
+			var headings = ["Student", "Quiz ID", "Status", "Modify"], statuses = ['Status', 'todo', 'done'];
 			 var rows = [];
-			 var ids = new Set(), students = new Set(), statuses = new Set();
+			 var ids = new Set(), students = new Set();
 			 ids.add("Quiz ID");
 			 students.add("Student");
-			 statuses.add("Status");
 			 for(var i = 1; i <= json.length; i++) 
-			 {
-				 var unassignButton = '<input type="button" value="Unassign" id = "unassignQuizStudent' + i + '"/>';
-				 rows[i-1] = [json[i-1].student.firstName + " " + json[i-1].student.secondName, json[i-1].quiz.id , json[i-1].status, unassignButton];
-				 ids.add(json[i-1].quiz.id);
-				 students.add(json[i-1].student.firstName + " " + json[i-1].student.secondName + " id=" + json[i-1].student.id);
-				 statuses.add(json[i-1].status);
-				 $('#unassignQuizStudent' + i).click(unassignQuizStudent);
-			 }
+				 {
+				 	var buttonvalues = json[i-1].student.id + ';' + json[i-1].quiz.id ;
+				 	var buttonnames = ("$'#unassignQuizStudent'" + i);
+					 var unassignButton = '<input type="button" value="Unassign" class = unassignButton id = "unassignQuizStudent' + i + '\"/>';
+//					 
+					 rows[i-1] = [json[i-1].student.firstName + " " + json[i-1].student.secondName, json[i-1].quiz.id , json[i-1].status, unassignButton];
+					 students.add(json[i-1].student.firstName + " " + json[i-1].student.secondName + " id=" + json[i-1].student.id);
+
+				 }
+			 $('#unassignQuizStudent 1').click( function() 
+					 { 
+					 	alert( "something" ) ;
+					 });
+//			 $('#unassignQuizStudent' + i).val()
+//			 buttonvalues, unassignQuizStudent
+			 for(var i = 0; i < quizzes.length; i++)
+				 {
+				 	ids.add(quizzes[i].id);
+				 }
 			var number = document.getElementById('taskQuizTeacher');
 			var st = document.getElementById('taskPersonTeacher');
 			var status = document.getElementById('taskStatusTeacher');
@@ -479,7 +592,10 @@ function fillTasksForTeacher()
 			$('#taskQuizTeacher').change(selectTaskTeacher); 
 			$('#taskPersonTeacher').change(selectTaskTeacher);
 			$('#taskStatusTeacher').change(selectTaskTeacher);
-	      },
+			
+			//add buttons listeners
+			$('#assignQuizStudent').click(assignQuizStudent);
+		},
 	    error: function( error )
 	      {
 
@@ -491,8 +607,39 @@ function fillTasksForTeacher()
 
 function selectTaskTeacher()
 {
-	
+	$.ajax({
+		type: "GET",
+		url: "selectTasksTeacher",
+		data: $('#taskTeacher').serialize(),
+		dataType: "json",
+		success: function(json)
+	      {
+			 var headings = ["Student", "Quiz ID", "Status", "Modify"];
+			 var rows = [];
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 var unassignButton = '<input type="button" value="Unassign" id = "unassignQuizStudent' + i + '"/>';
+				 rows[i-1] = [json[i-1].student.firstName + " " + json[i-1].student.secondName, json[i-1].quiz.id , json[i-1].status, unassignButton];
+				 $('#unassignQuizStudent' + i).click(unassignQuizStudent);
+			 }
+			
+			htmlInsert("tasksTableTeacher", getSortedTable(headings, rows, 'tasksResultTeacher'));
+			
+			//sort table
+			$("#tasksResultTeacher").tablesorter();
+			
+			//add quiz info on hover
+			  $().hover;
+	      },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
 }
+
 
 //***************Dialog Windows Functions **********************
 
@@ -732,12 +879,12 @@ function generateAnswerField(question) {
 			$('#formAnswer input').click(function(){ answer_to_check += [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
 			break;
 		case 'type_number':
-			answers[0] = eval(question.question);
+			answers[0] = eval(question.question); //calculates expression in question
 			$('#formAnswer').append('<input type="text" name="answer" id="answer" class="text ui-widget-content ui-corner-all" />');
 			answer_to_check = document.getElementById("answer").value;
 			break;
 		case 'scrol_number':
-			answers[0] = eval(question.question);
+			answers[0] = eval(question.question); //calculates expression in question
 			$('#formAnswer').append('<div id="slider" style="margin-left: 10px"></div>'+
 										'<div id="slider_display" align="center">0</div>');
 			$("#slider").slider({ min: -100, 
@@ -790,9 +937,30 @@ function generateAnswerField(question) {
 	$('#student_answer').append('</form>');
 }
 
-function unassignQuizStudent()
+function assignQuizStudent()
 {
-	
+	$.ajax({
+		type: "GET",
+		url: "assignQuizStudent",
+		data: $('#taskTeacher').serialize()+"&teacher="+teacher.id,
+		dataType: "text",
+		success: function(json)
+		{
+			alert(json);
+			fillTasksForTeacher();
+		},
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
+}
+
+function unassignQuizStudent(value)
+{
+	alert("unassign: " + value);
 }
 
 function getInputData(question)
@@ -902,6 +1070,10 @@ function getSortedTable(headings, rows, tableId)
 		case("tasksResultTeacher"):
 			text = " task(s) found" + 
 			  " <em>TIP!</em> Sort by clicking column header! </p> ";
+		case ("tasksResultStudent"):
+			text = " tasks found" + 
+			  " <em>TIP!</em> Sort by clicking column header! </p> " +
+			  "<p class=tip> <em>TIP!</em> Click Quiz ID to start Quiz </p>";
 		default:
 			break;		
 	}

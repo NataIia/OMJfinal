@@ -1,13 +1,16 @@
 servlets\SelectQuizzes.class
 servlets\DBconnect.class
 beans\Question.class
+servlets\SelectTasksTeacher.class
 dao\Idao.class
 dao\QuestionDao.class
 servlets\CheckAnswer.class
 beans\Quiz.class
 dao\PersonDao.class
+service\TaskUtils.class
 beans\Entity.class
 dao\ResultsDao.class
+servlets\SelectTasksStudent.class
 service\QuizUtils.class
 service\SolutionUtils.class
 servlets\Solutions.class
@@ -20,6 +23,7 @@ service\QuizQuestionUtils.class
 servlets\Tasks.class
 servlets\SelectSolutionsTeacher.class
 beans\Answer.class
+servlets\AssignQuizStudent.class
 beans\Student.class
 service\QuestionAnswerUtils.class
 beans\QuizSolution.class

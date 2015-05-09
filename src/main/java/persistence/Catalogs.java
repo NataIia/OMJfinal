@@ -1,5 +1,6 @@
 package persistence;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -480,6 +481,36 @@ public class Catalogs implements Idao
 	public void saveTasks(ArrayList<Task> tasks)
 	{
 		this.tasks = tasks;
+	}
+	
+	public void addTaskToDB(String student, String quiz, String status, String teacher)
+	{
+		Integer studentId = Integer.parseInt(student.split("=")[1]);
+		Integer quizId = Integer.parseInt(quiz);
+		Integer teacherId = Integer.parseInt(teacher);
+		String thema = quizzes.stream().filter(q -> q.getId() == quizId).findFirst().get().getThema();
+		String queryIn = "INSERT INTO omj_final.tbl_task (student, quiz, task_status, author, thema) VALUES (?, ?, ?, ?, ?);";
+
+		try
+		{
+			PreparedStatement psIn = connection.prepareStatement(queryIn);
+			psIn.setInt(1, studentId);
+			psIn.setInt(2, quizId);
+			psIn.setString(3, status);
+			psIn.setInt(4, teacherId);
+			psIn.setString(5, thema);
+			
+			psIn.execute();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		
+		tasks = null;
+		setTasks();
+		
 	}
 
 	public void saveCatalogs()
