@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 public class QuizSolution extends Entity
 {
 	private Quiz quiz;
@@ -200,9 +204,27 @@ public class QuizSolution extends Entity
 		for (Question q : this.getQuiz().getQuestions())
 		{
 			String answer = "";
-			for (Answer a : q.getCorrectAnswer())
+			System.out.println(q.getCorrectAnswer());
+			if(q.getCorrectAnswer() == null)
 			{
-				answer += (a.getTik() == null ? "" : (a.getTik() + " -> ")) + a.getTok() + ";";  
+				try
+				{
+					ScriptEngineManager mgr = new ScriptEngineManager();
+			    	ScriptEngine engine = mgr.getEngineByName("JavaScript");
+					String an = engine.eval(q.getQuestion()).toString();
+					answer += an + ";";
+				} catch (ScriptException e)
+				{
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+			else
+			{
+				for (Answer a : q.getCorrectAnswer())
+				{
+					answer += (a.getTik() == null ? "" : (a.getTik() + "-")) + a.getTok() + ";";  
+				}
 			}
 				
 		    s.add(answer);

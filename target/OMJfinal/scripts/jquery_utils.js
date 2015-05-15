@@ -181,7 +181,7 @@ function fillSolutionsForStudent()
 					 }
 				 for (var ca in json[i -1].correctAnswersAsString)
 					 {
-					 correct_answers_as_string.push(json[i -1].correctAnswersAsString[ca]);
+				 		correct_answers_as_string.push(json[i -1].correctAnswersAsString[ca]);
 					 }
 				 for(var a in json[i-1].answersAsString)
 					 {
@@ -303,61 +303,109 @@ function selectSolutionsStudent()
 
 function fillTasksForStudent()
 {
-	var headings = [ "Quiz ID", "Thema", "Status"];
-	 var rows = [];
-	 var ids = new Set(), themas = new Set(), statuses = new Set();
-	 ids.add("Quiz ID");
-	 themas.add("Thema");
-	 statuses.add("Status");
+	$.ajax({
+		type: "GET",
+		url: "tasks",
+		dataType: "json",
+		success: function(json) 
+		{
+			var headings = [ "Quiz ID", "Thema", "Status"];
+			 var rows = [];
+			 var ids = new Set(), themas = new Set(), statuses = new Set();
+			 ids.add("Quiz ID");
+			 themas.add("Thema");
+			 statuses.add("Status");
+		
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 rows[i-1] = [json[i-1].quiz.id , json[i-1].thema, json[i-1].status];
+				 ids.add(json[i-1].quiz.id);
+				 statuses.add(json[i-1].status);
+				 themas.add(json[i-1].quiz.thema);
+			 }
+			var number = document.getElementById('taskQuizStudent');
+			var thema = document.getElementById('taskThemaStudent');
+			var status = document.getElementById('taskStatusStudent');
+		
+			ids.forEach(function(value){
+			    var optNumber = document.createElement('option');
+			    optNumber.innerHTML = value;
+			    optNumber.value = value;
+			    number.appendChild(optNumber);
+			});
+			
+			themas.forEach(function(value){
+				var optThema = document.createElement('option');
+				optThema.innerHTML = value;
+				optThema.value = value;
+				thema.appendChild(optThema);
+			});
+			
+			statuses.forEach(function(value){
+				var optStatus = document.createElement('option');
+				optStatus.innerHTML = value;
+				optStatus.value = value;
+				status.appendChild(optStatus);
+			});
+			
+			htmlInsert("tasksTableStudent", getSortedTable(headings, rows, 'tasksResultStudent'));
+			
+			//sort table
+			$("#tasksResultStudent").tablesorter();
+			
+			//make cell clickable
+			  $('.clickableCell').click(function(e){openQuizSolutionDialog(e.target.innerHTML, 0)});
+			
+			//add quiz info on hover
+			  $().hover;
+			  
+			//couple option selection with function
+			$('#taskQuizStudent').change(selectTaskStudent); 
+			$('#taskThemaStudent').change(selectTaskStudent);
+			$('#taskStatusStudent').change(selectTaskStudent);
+			
+		 },
+	    error: function( error )
+	      {
 
-	 for(var i = 1; i <= json.length; i++) 
-	 {
-		 rows[i-1] = [json[i-1].quiz.id , json[i-1].thema, json[i-1].status];
-		 ids.add(json[i-1].quiz.id);
-		 statuses.add(json[i-1].status);
-		 thema.add(json[i-1].quiz.thema);
-	 }
-	var number = document.getElementById('taskQuizStudent');
-	var thema = document.getElementById('taskThemaStudent');
-	var status = document.getElementById('taskStatusStudent');
+	         alert( "Error: " + error );
 
-	ids.forEach(function(value){
-	    var optNumber = document.createElement('option');
-	    optNumber.innerHTML = value;
-	    optNumber.value = value;
-	    number.appendChild(optNumber);
-	});
-	
-	themas.forEach(function(value){
-		var optThema = document.createElement('option');
-		optThema.innerHTML = value;
-		optThema.value = value;
-		thema.appendChild(optThema);
-	});
-	
-	statuses.forEach(function(value){
-		var optStatus = document.createElement('option');
-		optStatus.innerHTML = value;
-		optStatus.value = value;
-		status.appendChild(optStatus);
-	});
-	
-	htmlInsert("tasksTableStudent", getSortedTable(headings, rows, 'tasksResultStudent'));
-	
-	//sort table
-	$("#tasksResultStudent").tablesorter();
-	
-	//add quiz info on hover
-	  $().hover;
-	  
-	//couple option selection with function
-	$('#taskQuizStudent').change(selectTaskStudent); 
-	$('#taskThemaStudent').change(selectTaskStudent);
-	$('#taskStatusStudent').change(selectTaskStudent);
+	      }
+		});	
 }
 
 function selectTaskStudent()
-{}
+{
+	$.ajax({
+		type: "GET",
+		url: "selectTasksStudent",
+		data: $('#taskStudent').serialize() + "&student=" + student.id,
+		dataType: "json",
+		success: function(json)
+	      {
+			 var headings = ["Student", "Quiz ID", "Status"];
+			 var rows = [];
+			 for(var i = 1; i <= json.length; i++) 
+			 {
+				 rows[i-1] = [json[i-1].quiz.id , json[i-1].thema, json[i-1].status];
+			 }
+			
+			htmlInsert("tasksTableStudent", getSortedTable(headings, rows, 'tasksResultStudent'));
+			
+			//sort table
+			$("#tasksResultStudent").tablesorter();
+			
+			//add quiz info on hover
+			  $().hover;
+	      },
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
+}
 
 function fillSolutionsForTeacher()
 {
@@ -710,7 +758,7 @@ function quizDialog(quizID, questionNumber)
 		{
 			if (quizzes[j].id == quizID) { quiz = quizzes[j]; }
 		}
-	$('#quiz_question').text("quiz ID " + quizID + quiz.questions[questionNumber].question);
+	$('#quiz_question').text("quiz ID: " + quizID + ". Question: " + quiz.questions[questionNumber].question);
 	$('#student_answer').empty();
 	generateAnswerField(quiz.questions[questionNumber]);
 	$('#progress_quiz').html("Question " + (questionNumber+1) + " from " + quiz.questions.length);
@@ -725,7 +773,6 @@ function quizDialog(quizID, questionNumber)
 		buttons: {
 			"Submit answer": function() {
 				getInputData(quiz.questions[questionNumber]);
-				score++;
 				$.ajax({
 					type: "GET",
 					url: "check_answer",
@@ -733,7 +780,24 @@ function quizDialog(quizID, questionNumber)
 					dataType: "text",
 					success: function(checked)
 				      {
-						alert(checked);
+						if(checked < 0)
+							{
+								alert("Not correct");
+							}
+						else
+							{
+								alert("Correct!");
+								score++;
+							}
+						$( "#QuizSolutionDialog" ).dialog( "close" );
+						if(questionNumber < quiz.questions.length - 1)
+							{
+								openQuizSolutionDialog(quizID, questionNumber + 1);
+							}
+						else 
+							{
+								finishQuizDialog();
+							}
 				      },
 				    error: function( error )
 				      {
@@ -767,7 +831,8 @@ function quizDialog(quizID, questionNumber)
 
 function finishDialog()
 {
-	$('#quiz_done').text("Quiz DONE!");
+	$('#quiz_done').text("Quiz DONE! Total score is: " + score);
+	// insert data in db
 	$( "#QuizFinishDialog" ).dialog({
 		autoOpen: false,
 		height: 500,
@@ -809,7 +874,7 @@ function generateAnswerField(question) {
 					'<input type="radio" name = "radio" id="answerTrue" value=true /><label for="answerTrue">True</label> \n' +
 					'<input type="radio" name = "radio" id="answerFalse" value=false /><label for="answerFalse">False</label></div>');
 			$("#answer").buttonset();
-			$('#answer input').click(function(){ answer_to_check = [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
+//			$('#answer input').click(function(){ answer_to_check = [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
 			break;
 		case 'select_one':
 			$('#formAnswer').append('<div id="answer">');
@@ -818,7 +883,7 @@ function generateAnswerField(question) {
 				$('#formAnswer').append('<br/><input type="radio" name = "radio" id="answer_'+answers[i].tok+'\" value='+answers[i].tok+' /><label for="answer_'+answers[i].tok+'\">'+answers[i].tok+'</label>');
 				}
 			$('#formAnswer').append('</div>');
-			$('#formAnswer input').click(function(){ answer_to_check = [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
+//			$('#formAnswer input').click(function(){ answer_to_check = [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
 			break;
 		case 'select_more':
 			$('#formAnswer').append('<div id="answer">');
@@ -1022,6 +1087,10 @@ function getSortedTable(headings, rows, tableId)
 		case("tasksResultTeacher"):
 			text = " task(s) found" + 
 			  " <em>TIP!</em> Sort by clicking column header! </p> ";
+		case ("tasksResultStudent"):
+			text = " tasks found" + 
+			  " <em>TIP!</em> Sort by clicking column header! </p> " +
+			  "<p class=tip> <em>TIP!</em> Click Quiz ID to start Quiz </p>";
 		default:
 			break;		
 	}

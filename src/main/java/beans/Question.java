@@ -218,25 +218,38 @@ public class Question extends Entity
 		correctAnswer.add(answer);
 	}
 
+	private ArrayList<String> correctAnswersString()
+	{
+		ArrayList<String> a = new ArrayList<>();
+		correctAnswer.stream().forEach(an -> a.add(an.getTik() == null ? an.getTok() : an.getTik() + "-" + an.getTok()));
+		return a;
+	}
+	
 	/**
 	 * return negative if answer is not correct and 0 is correct
 	 * 
 	 * @param answer
 	 * @return
 	 */
-	public int isCorrectAnswer(ArrayList<String> answer)
+	public int isCorrectAnswer(String answer)
 	{
-		int result = -1*answer.size();
+		int result = -1;
 		switch(type)
 		{
 			case "yes/no":
 			case "select_one":
+				if (correctAnswersString().contains(answer)) result++;
+				break;
 			case "select_more":
-				if (answer.size() == correctAnswer.size())
+			case "match":
+				String answers[] = answer.split(";");
+				result = answers.length*(-1);
+				
+				if (answers.length == correctAnswer.size())
 				{
-					for(String a : answer)
+					for(String a : answers)
 					{
-						if (correctAnswer.contains(a)) result++;
+						if (correctAnswersString().contains(a)) result++;
 					}
 				}
 				break;
@@ -247,7 +260,7 @@ public class Question extends Entity
 				ScriptEngineManager mgr = new ScriptEngineManager();
 		    	ScriptEngine engine = mgr.getEngineByName("JavaScript");
 				String a = engine.eval(question).toString();
-				if (answer.get(0).equals(a)) result ++;
+				if (answer.equals(a)) result ++;
 			} catch (ScriptException e)
 			{
 				e.printStackTrace();
