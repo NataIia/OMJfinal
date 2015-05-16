@@ -31,11 +31,30 @@
 		    <li><a href="#teacher_tasks">For teacher. Assign tasks</a></li>
 		  </ul>
 		  <div id="home_tab">
-	        <h2>Structure</h2>
-	        <p>There are hardcoded question and answers for different topics and study years.
-	        Click button "generate question" to create another question with different multiple chose answers.
-	        Click button "generate quiz" to create another quiz from existing answers.
-	        Student can not do the same quiz two times, system propose him another quizzes with the same topic.</p>
+	        <h2>Opdracht</h2>
+	        <ul class = opdracht>
+	        	<li>Bezoekers kunnen browsen door de vragenreeksen - OK</li>
+	        	<li>Vragenreeksen kunnen per thema bekeken worden - OK</li>
+	        	<li>Er zijn verschillende vragen reeksen beschikbaar - OK</li>
+	        	<li>1 reeks bestaat uit een naam en heeft een variabel aantal vragen over een bepaald thema - OK</li>
+	        	<li>Vragen van onderstaande types:
+	        		<ul>
+	        			<li>Ja/nee vraag - OK</li>
+	        			<li>Multiple choice door selectie van 1 antwoord - OK</li>
+	        			<li>Muliple choice met meedere mogelijke antwoorden - OK</li>
+	        			<li>Numeriek antwoord door gebruik van een slider - OK</li>
+	        			<li>Numeriek antwoord door ingave via toetsenbord - OK</li>
+	        			<li>Drag and drop waarbij het juiste antwoord in een bepaald veld moet geplaatst worden - OK</li>
+	        		</ul>
+	        	</li>
+	        	<li>Deelnemers krijgen na elke vraag te zien of deze correct werd beantwoord - OK</li>
+	        	<li>Deelnemers krijgen na de vragenreeks te zien wat hun score is. - OK</li>
+	        	<li>Deelnemers kunnen zich registreren - OK</li>
+	        	<li>Deelnemers kunnen de behaalde resultaten bekijken. - half</li>
+	        	<li>Beheerders kunnen voor deelnemers een todo lijst opmaken - OK</li>
+	        	<li>Vragenreeksen kunnen afhankelijkheden hebben. (x kan pas gedaan worden indien deelnemer reeks y reeds met success voltooide.)</li>
+	        	<li>Beheerders kunnen rapporten opmaken met de resultaten van 1 of meerdere deelnemers - OK</li>
+	        </ul>
 		   <h2>Log In</h2>
 		   <p>Everyone can see available quizzes. But only inlogged student can solve the quiz</p>
 		   <p>If noone is logged in, personal tabs with results and tasks are dissabled</p>

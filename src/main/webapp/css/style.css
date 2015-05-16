@@ -9,6 +9,10 @@ select{
 	width: 100%;
 }
 
+.opdracht{
+font-size: 12px;
+}
+
 #container{
 margin: 0px auto;
 width: 90%;

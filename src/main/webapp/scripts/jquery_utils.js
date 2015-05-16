@@ -309,6 +309,7 @@ function fillTasksForStudent()
 		type: "GET",
 		url: "tasks",
 		dataType: "json",
+		data:"id="+student.id,
 		success: function(json) 
 		{
 			var headings = [ "Quiz ID", "Thema", "Status"];
@@ -653,8 +654,12 @@ function openLogin()
 
 function openQuizSolutionDialog(quizID, questionNumber)
 { 
-	quizDialog(quizID, questionNumber);
-	$( "#QuizSolutionDialog" ).dialog( "open" ); 
+	if (student == null) alert ("Quiz can be solved only by registered students. Log-in or register.");
+	else
+		{
+			quizDialog(quizID, questionNumber);
+			$( "#QuizSolutionDialog" ).dialog( "open" ); 
+		}
 }
 
 
@@ -692,7 +697,7 @@ function loginDialog()
 				if (login_or_registration_login == 'block') send_data = $('#loginForm').serialize();
 				else if (login_or_registration_registration == 'block') send_data = $('#registrationForm').serialize();
 //				allFields.removeClass( "ui-state-error" );
-				alert(send_data);
+//				alert(send_data);
 
 				bValid = checkLength( name, "name", 3, 16 );
 
@@ -776,7 +781,7 @@ function quizDialog(quizID, questionNumber)
 		buttons: {
 			"Submit answer": function() {
 				var answer = getInputData(quiz.questions[questionNumber]);
-				alert(answer);
+//				alert(answer);
 				$.ajax({
 					type: "GET",
 					url: "check_answer",

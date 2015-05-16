@@ -15,7 +15,7 @@ public class QuizSolution extends Entity
 	private Quiz quiz;
 	private int score;
 	private Map<Question, List<String>> answers; // mapped array of student answers where Integer refers to questionID and List<String> refers to given answers array
-	// prepare list for js 
+	// prepare lists for js bulletedLists
 	private ArrayList<String> answersAsString; 
 	private ArrayList<String> questionsAsString;
 	private ArrayList<String> correctAnswersAsString;
@@ -235,6 +235,10 @@ public class QuizSolution extends Entity
 	public int getScore()
 	{
 		int score = 0;
+		for (Map.Entry<Question, List<String>> entry : answers.entrySet())
+		{
+		    if (entry.getKey().isCorrectAnswer(entry.getValue())) score++;
+		}
 		return score;
 	}
 	/* (non-Javadoc)
