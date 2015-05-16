@@ -226,7 +226,7 @@ public class Question extends Entity
 	}
 	
 	/**
-	 * return negative if answer is not correct and 0 is correct
+	 * return negative if answer is not correct and 0 if correct
 	 * 
 	 * @param answer
 	 * @return

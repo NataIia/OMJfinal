@@ -12,6 +12,8 @@ var answer_to_check = "";
 var score = 0;
 var student;
 var teacher;
+var matchAnswers = [];
+var quizAnswers = "quizAnswers=";
 
 //executed on load
 $(function() {
@@ -772,11 +774,12 @@ function quizDialog(quizID, questionNumber)
 		modal: true,
 		buttons: {
 			"Submit answer": function() {
-				getInputData(quiz.questions[questionNumber]);
+				var answer = getInputData(quiz.questions[questionNumber]);
+				alert(answer);
 				$.ajax({
 					type: "GET",
 					url: "check_answer",
-					data: 'questionID='+quiz.questions[questionNumber].id+'&'+$('#formAnswer').serialize(),
+					data: 'questionID='+quiz.questions[questionNumber].id+'&'+answer,
 					dataType: "text",
 					success: function(checked)
 				      {
@@ -789,6 +792,8 @@ function quizDialog(quizID, questionNumber)
 								alert("Correct!");
 								score++;
 							}
+						quizAnswers += quiz.questions[questionNumber].id+"answer="+answer + ":";
+						matchAnswers=null;
 						$( "#QuizSolutionDialog" ).dialog( "close" );
 						if(questionNumber < quiz.questions.length - 1)
 							{
@@ -796,7 +801,7 @@ function quizDialog(quizID, questionNumber)
 							}
 						else 
 							{
-								finishQuizDialog();
+								finishQuizDialog(quizID);
 							}
 				      },
 				    error: function( error )
@@ -829,10 +834,27 @@ function quizDialog(quizID, questionNumber)
 	});
 }
 
-function finishDialog()
+function finishDialog(quizID)
 {
 	$('#quiz_done').text("Quiz DONE! Total score is: " + score);
 	// insert data in db
+	$.ajax({
+		type: "GET",
+		url: "submitSolution",
+		data: "student="+student+"&quiz="+quizID+"&"+quizAnswers,
+		dataType: "text",
+		success: function(json)
+		{
+			alert(json);
+			quizAnswers="quizAnswers=";
+		},
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
 	$( "#QuizFinishDialog" ).dialog({
 		autoOpen: false,
 		height: 500,
@@ -874,7 +896,6 @@ function generateAnswerField(question) {
 					'<input type="radio" name = "radio" id="answerTrue" value=true /><label for="answerTrue">True</label> \n' +
 					'<input type="radio" name = "radio" id="answerFalse" value=false /><label for="answerFalse">False</label></div>');
 			$("#answer").buttonset();
-//			$('#answer input').click(function(){ answer_to_check = [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
 			break;
 		case 'select_one':
 			$('#formAnswer').append('<div id="answer">');
@@ -883,17 +904,15 @@ function generateAnswerField(question) {
 				$('#formAnswer').append('<br/><input type="radio" name = "radio" id="answer_'+answers[i].tok+'\" value='+answers[i].tok+' /><label for="answer_'+answers[i].tok+'\">'+answers[i].tok+'</label>');
 				}
 			$('#formAnswer').append('</div>');
-//			$('#formAnswer input').click(function(){ answer_to_check = [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
 			break;
 		case 'select_more':
 			$('#formAnswer').append('<div id="answer">');
 			for(i = 0; i < answers.length; i++)
 				{
-				$('#formAnswer').append('<br/><input type="checkbox" id="answer_'+answers[i].tok+'\" value='+answers[i].tok+'/><label for="answer_'+answers[i].tok+'\">'+answers[i].tok+'</label>');
+				$('#formAnswer').append('<br/><input type="checkbox" name="checkbox" id="answer_'+answers[i].tok+'\" value=\"'+answers[i].tok+'\"/><label for="answer_'+answers[i].tok+'\">'+answers[i].tok+'</label>');
 				}
 			$('#formAnswer').append('</div>');
 			answer_to_check = "";
-			$('#formAnswer input').click(function(){ answer_to_check += [$('input[name="radio"]:checked').val()]; alert(answer_to_check);});
 			break;
 		case 'type_number':
 			answers[0] = eval(question.question); //calculates expression in question
@@ -906,13 +925,12 @@ function generateAnswerField(question) {
 										'<div id="slider_display" align="center">0</div>');
 			$("#slider").slider({ min: -100, 
 									max: 100, 
-									serialization: {},
 									slide: function(event, ui) {
 										$this = $(this);
 										$("#slider_display").html(ui.value); 
 									    $("#slider_display").append(
 									            $("<input type='hidden' />").attr({
-									                name:$this.attr('id'),
+									                name: $this.attr('id'),
 									                value: ui.value
 									            }));
 										}});
@@ -934,12 +952,13 @@ function generateAnswerField(question) {
 			for(i = 0; i < question.correctAnswer.length; i++)
 			{
 				$('#formAnswer').append('<tr>');
-				$('#formAnswer').append('<td><div id="draggable'+i+'"  class="ui-widget-content draggable">'+tok[i]+'</div></td>');
-				$('#formAnswer').append('<td><div id="droppable'+i+'"  class="ui-widget-header droppable">'+tik[i]+'</div></td>');
+				$('#formAnswer').append('<td><div id="draggable'+i+'"  data-id="' + tok[i] + '" class="ui-widget-content draggable">'+ tok[i] +'</div></td>');
+				$('#formAnswer').append('<td><div id="droppable'+i+'"  data-id="' + tik[i] + '" class="ui-widget-header droppable">'+ tik[i] +'</div></td>');
 				$('#formAnswer').append('</tr>');
 				$( "#draggable"+i ).draggable();
 			    $( "#droppable"+i ).droppable({
 			      drop: function( event, ui ) {
+			    	  matchAnswers.push($(this).data("id")+"-"+$(ui.helper).data("id"));
 			        $( this )
 			          .addClass( "ui-state-highlight" )
 			          .find( "p" )
@@ -982,76 +1001,39 @@ function unassignQuizStudent(value)
 
 function getInputData(question)
 {
+	var answer = "answer=";
+	$('').serialize()
 	switch(question.type)
 	{
 		case 'yes/no':
-//			$('#formAnswer').append('<div id="answer"> \n' + 
-//					'<input type="radio" name = "radio" id="answerTrue" /><label for="answerTrue">True</label> \n' +
-//					'<input type="radio" name = "radio" id="answerFalse" /><label for="answerFalse">False</label></div>');
-//			$("#answer").buttonset();
-			break;
 		case 'select_one':
-//			$('#formAnswer').append('<div id="answer">');
-//			for(i = 0; i < answers.length; i++)
-//				{
-//				$('#formAnswer').append('<br/><input type="radio" name = "radio" id="answer_'+answers[i].tok+'\" /><label for="answer_'+answers[i].tok+'\">'+answers[i].tok+'</label>');
-//				}
-//			$('#formAnswer').append('</div>');
+			answer += $("#formAnswer input:radio:checked").val();
 			break;
 		case 'select_more':
-//			$('#formAnswer').append('<div id="answer">');
-//			for(i = 0; i < answers.length; i++)
-//				{
-//				$('#formAnswer').append('<br/><input type="checkbox" id="answer_'+answers[i].tok+'\" /><label for="answer_'+answers[i].tok+'\">'+answers[i].tok+'</label>');
-//				}
-//			$('#formAnswer').append('</div>');
+			var selectedValues = $("#formAnswer input:checkbox:checked").map(function(){
+			      return $(this).val();
+			    }).toArray();
+			for (i = 0; i < selectedValues.length; i++)
+			{
+				answer += selectedValues[i]+";";
+			}
 			break;
 		case 'type_number':
-//			answers[0] = eval(question.question);
-//			$('#formAnswer').append('<input type="text" name="answer" id="answer" class="text ui-widget-content ui-corner-all" />');
+			answer += $("#formAnswer input:text").val();
 			break;
 		case 'scrol_number':
-//			answers[0] = eval(question.question);
-//			$('#formAnswer').append('<div id="slider" style="margin-left: 10px"></div>'+
-//										'<div id="slider_display" align="center">0</div>');
-//			$("#slider").slider({ min: -100, 
-//									max: 100, 
-//									slide: function(event, ui) {
-//										$("#slider_display").html(ui.value); 
-//										}});
+			answer += $("#slider_display").text();
 			break;
 		case 'match':
-//			var tik = [], tok = [];
-//			if (question.correctAnswer != null)
-//			{
-//				for (var i = 0; i < question.correctAnswer.length; i++)
-//					{
-//						answers[i] = question.correctAnswer[i];
-//						tik[i] = question.correctAnswer[i].tik;
-//						tok[i] = question.correctAnswer[i].tok;
-//					}
-//				shuffle(tik);
-//				shuffle(tok);
-//			}
-//			for(i = 0; i < question.correctAnswer.length; i++)
-//			{
-//				$('#formAnswer').append('<tr>');
-//				$('#formAnswer').append('<td><div id="draggable'+i+'"  class="ui-widget-content draggable">'+tok[i]+'</div></td>');
-//				$('#formAnswer').append('<td><div id="droppable'+i+'"  class="ui-widget-header droppable">'+tik[i]+'</div></td>');
-//				$('#formAnswer').append('</tr>');
-//				$( "#draggable"+i ).draggable();
-//			    $( "#droppable"+i ).droppable({
-//			      drop: function( event, ui ) {
-//			        $( this )
-//			          .addClass( "ui-state-highlight" )
-//			          .find( "p" )
-//			            .html( "Dropped!" );
-//			      }});
-//			}
+			for (i = 0; i < matchAnswers.length; i++)
+			{
+				answer += matchAnswers[i]+";";
+			}
 			break;
 		default:
 			break;
 	}
+	return answer;
 }
 
 

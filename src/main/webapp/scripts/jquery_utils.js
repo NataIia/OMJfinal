@@ -13,6 +13,7 @@ var score = 0;
 var student;
 var teacher;
 var matchAnswers = [];
+var quizAnswers = "quizAnswers=";
 
 //executed on load
 $(function() {
@@ -658,9 +659,9 @@ function openQuizSolutionDialog(quizID, questionNumber)
 
 
 
-function finishQuizDialog()
+function finishQuizDialog(quizID)
 {
-	finishDialog();
+	finishDialog(quizID);
 	$( "#QuizFinishDialog" ).dialog( "open" ); 
 }
 
@@ -791,6 +792,8 @@ function quizDialog(quizID, questionNumber)
 								alert("Correct!");
 								score++;
 							}
+						quizAnswers += quiz.questions[questionNumber].id+answer + ":";
+						matchAnswers=[];
 						$( "#QuizSolutionDialog" ).dialog( "close" );
 						if(questionNumber < quiz.questions.length - 1)
 							{
@@ -798,7 +801,7 @@ function quizDialog(quizID, questionNumber)
 							}
 						else 
 							{
-								finishQuizDialog();
+								finishQuizDialog(quizID);
 							}
 				      },
 				    error: function( error )
@@ -818,7 +821,7 @@ function quizDialog(quizID, questionNumber)
 					}
 				else 
 					{
-						finishQuizDialog();
+						finishQuizDialog(quizID);
 					}
 			},
 			Cancel: function() {
@@ -831,10 +834,28 @@ function quizDialog(quizID, questionNumber)
 	});
 }
 
-function finishDialog()
+function finishDialog(quizID)
 {
+	alert(quizID);
 	$('#quiz_done').text("Quiz DONE! Total score is: " + score);
 	// insert data in db
+	$.ajax({
+		type: "GET",
+		url: "submitSolution",
+		data: "student="+student.id+"&quiz="+quizID+"&"+quizAnswers,
+		dataType: "text",
+		success: function(json)
+		{
+			alert(json);
+			quizAnswers="quizAnswers=";
+		},
+	    error: function( error )
+	      {
+
+	         alert( "Error: " + error );
+
+	      }
+		});	
 	$( "#QuizFinishDialog" ).dialog({
 		autoOpen: false,
 		height: 500,

@@ -512,6 +512,57 @@ public class Catalogs implements Idao
 		setTasks();
 		
 	}
+	
+	public void addQuizSolutionToDB(String student, String quiz, String[] answers)
+	{       
+		Integer studentId = Integer.parseInt(student);
+		Integer quizId = Integer.parseInt(quiz);
+		int solutionId = -1;
+		String queryIn = "INSERT INTO omj_final.tbl_quiz_solution (student, quiz) VALUES (?, ?);";
+		String queryIn2 = "INSERT INTO omj_final.tbl_question_solution_answer (quiz_solution, question, student_answer) VALUES (?, ?, ?)";
+		try
+		{
+			PreparedStatement psIn = connection.prepareStatement(queryIn, Statement.RETURN_GENERATED_KEYS);
+			psIn.setInt(1, studentId);
+			psIn.setInt(2, quizId);
+			
+			psIn.execute();
+			
+			ResultSet generatedKeys = psIn.getGeneratedKeys();
+			
+	        if (generatedKeys.next()) 
+	        {
+	            solutionId = generatedKeys.getInt(1);
+	        }
+	        else 
+	        {
+	            throw new SQLException("Creating user failed, no ID obtained.");
+	        }
+	        
+	        for(int i = 0; i < answers.length; i++)
+	        {
+	        	int question = Integer.parseInt(answers[i].split("answer=")[0]);
+	        	String answer = answers[i].split("answer=")[1];
+		        PreparedStatement psIn2 = connection.prepareStatement(queryIn2);
+				psIn2.setInt(1, solutionId);
+				psIn2.setInt(2, question);
+				psIn2.setString(3, answer);
+				
+				psIn2.execute();
+	        }
+
+	        
+	        
+		}catch (SQLException e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+	    
+	        
+	        solutions = null;
+	        setSolutions();
+    }
 
 	public void saveCatalogs()
 	{
