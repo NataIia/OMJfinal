@@ -4,7 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import service.QuestionAnswerUtils;
@@ -536,7 +540,7 @@ public class Catalogs implements Idao
 	        }
 	        else 
 	        {
-	            throw new SQLException("Creating user failed, no ID obtained.");
+	            throw new SQLException("Registration solution failed, no ID obtained.");
 	        }
 	        
 	        for(int i = 0; i < answers.length; i++)
@@ -563,6 +567,56 @@ public class Catalogs implements Idao
 	        solutions = null;
 	        setSolutions();
     }
+	
+	public void addStudentToDB(String firstName, String lastName, String loginName, String password, String birthDate, int studyYear)
+	{
+		String queryIn = "INSERT INTO omj_final.tbl_person (first_name, last_name, login_name, password_field, birth_date) VALUES (?, ?, ?, ?, ?);";
+		String queryIn2 = "INSERT INTO omj_final.tbl_student (id, study_year) VALUES (?, ?)";
+		int id = -1;
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yy");
+
+		
+		try
+		{
+			Date bd = dateFormat.parse(birthDate);
+			java.sql.Date bd_sql = new java.sql.Date(bd.getTime());
+			
+			PreparedStatement psIn = connection.prepareStatement(queryIn, Statement.RETURN_GENERATED_KEYS);
+			psIn.setString(1, firstName);
+			psIn.setString(2, lastName);
+			psIn.setString(3, loginName);
+			psIn.setString(4, password);
+			psIn.setDate(5, bd_sql);
+			
+			psIn.execute();
+			
+			ResultSet generatedKeys = psIn.getGeneratedKeys();
+			
+	        if (generatedKeys.next()) 
+	        {
+	            id = generatedKeys.getInt(1);
+		        PreparedStatement psIn2 = connection.prepareStatement(queryIn2);
+				psIn2.setInt(1, id);
+				psIn2.setInt(2, studyYear);
+				
+				psIn2.execute();
+	        }
+	        else 
+	        {
+	            throw new SQLException("Creating student failed, no ID obtained.");
+	        }      
+	        
+		}catch (SQLException | ParseException e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		students = null;
+		teachers = null;
+		setPeople();
+	}
 
 	public void saveCatalogs()
 	{

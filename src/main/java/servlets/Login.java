@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import persistence.Catalogs;
 import dao.PersonDao;
 import beans.Person;
 
@@ -36,12 +37,28 @@ public class Login extends HttpServlet
 			if (p.getPassword().equals(loginPassword))	out.println(new JSONObject(p));
 			else out.println("{\"id\": \"wrong password\"}");
 		}
-		
-		//this part of code suppose to register new student and login as new registered student
-		String registerFirstName = request.getParameter("first_name");
-		String registerLastName = request.getParameter("last_name");
-		String registerName = request.getParameter("register_name");
-		
+		else
+		{
+			//this part of code suppose to register new student and login as new registered student
+			String registerFirstName = request.getParameter("first_name");
+			String registerLastName = request.getParameter("last_name");
+			String registerName = request.getParameter("register_name");
+			String registerPassword = request.getParameter("register_password");
+			String registerYear = request.getParameter("study_year");
+			String registerBirthdate = request.getParameter("birthdate");
+			
+			if(pd.findByLoginName(registerName) != null) out.println("{\"id\": \"Person with given name already exist in data bank\"}");
+			else
+			{
+				Catalogs.get().addStudentToDB(registerFirstName, 
+											registerLastName, 
+											registerName, 
+											registerPassword, 
+											registerBirthdate, 
+											Integer.parseInt(registerYear));
+				out.println(new JSONObject(pd.findByLoginName(registerName)));
+			}
+		}	
 	}
 	
 	@Override

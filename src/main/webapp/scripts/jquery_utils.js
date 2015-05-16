@@ -692,6 +692,7 @@ function loginDialog()
 				if (login_or_registration_login == 'block') send_data = $('#loginForm').serialize();
 				else if (login_or_registration_registration == 'block') send_data = $('#registrationForm').serialize();
 //				allFields.removeClass( "ui-state-error" );
+				alert(send_data);
 
 				bValid = checkLength( name, "name", 3, 16 );
 

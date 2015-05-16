@@ -204,7 +204,6 @@ public class QuizSolution extends Entity
 		for (Question q : this.getQuiz().getQuestions())
 		{
 			String answer = "";
-			System.out.println(q.getCorrectAnswer());
 			if(q.getCorrectAnswer() == null)
 			{
 				try
