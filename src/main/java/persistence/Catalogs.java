@@ -294,7 +294,8 @@ public class Catalogs implements Idao
 						rs1.getInt("id"),
 						students.stream().filter(s -> (s.getId() == idStudent)).findFirst().get(),
 						quizzes.stream().filter(q -> (q.getId() == idQuiz)).findFirst().get(),
-						creationDate)); 
+						creationDate,
+						rs1.getInt("score"))); 
 			}
 		ResultSet rs2 = statement.executeQuery(query2);
 		while(rs2.next())
@@ -517,18 +518,19 @@ public class Catalogs implements Idao
 		
 	}
 	
-	public void addQuizSolutionToDB(String student, String quiz, String[] answers)
+	public void addQuizSolutionToDB(String student, String quiz, int score, String[] answers)
 	{       
 		Integer studentId = Integer.parseInt(student);
 		Integer quizId = Integer.parseInt(quiz);
 		int solutionId = -1;
-		String queryIn = "INSERT INTO omj_final.tbl_quiz_solution (student, quiz) VALUES (?, ?);";
+		String queryIn = "INSERT INTO omj_final.tbl_quiz_solution (student, quiz, score) VALUES (?, ?, ?);";
 		String queryIn2 = "INSERT INTO omj_final.tbl_question_solution_answer (quiz_solution, question, student_answer) VALUES (?, ?, ?)";
 		try
 		{
 			PreparedStatement psIn = connection.prepareStatement(queryIn, Statement.RETURN_GENERATED_KEYS);
 			psIn.setInt(1, studentId);
 			psIn.setInt(2, quizId);
+			psIn.setInt(3, score);
 			
 			psIn.execute();
 			

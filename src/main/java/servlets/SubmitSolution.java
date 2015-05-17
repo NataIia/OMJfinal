@@ -22,6 +22,7 @@ public class SubmitSolution extends HttpServlet
 		String[] answers = request.getParameter("quizAnswers").split(":");
 		Catalogs.get().addQuizSolutionToDB(request.getParameter("student"), 
 								request.getParameter("quiz"), 
+								Integer.parseInt(request.getParameter("score")),
 								answers);
 		
 		PrintWriter out = response.getWriter();

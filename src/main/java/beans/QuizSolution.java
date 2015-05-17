@@ -29,10 +29,11 @@ public class QuizSolution extends Entity
 	}
 	
 	public QuizSolution(String thema, int id, Person author, Quiz quiz,
-			GregorianCalendar creationDate)
+			GregorianCalendar creationDate, int score)
 	{
 		super(thema, id, author, creationDate);
 		this.quiz = quiz;
+		this.score = score;
 	}
 	/**
 	 * @return the quiz
@@ -48,6 +49,22 @@ public class QuizSolution extends Entity
 	{
 		this.quiz = quiz;
 	}
+	/**
+	 * @return the score
+	 */
+	public int getScore()
+	{
+		return score;
+	}
+
+	/**
+	 * @param score the score to set
+	 */
+	public void setScore(int score)
+	{
+		this.score = score;
+	}
+
 	/**
 	 * @return the answers
 	 */
@@ -230,17 +247,7 @@ public class QuizSolution extends Entity
 		}
 		return s;
 	}
-
-
-	public int getScore()
-	{
-		int score = 0;
-		for (Map.Entry<Question, List<String>> entry : answers.entrySet())
-		{
-		    if (entry.getKey().isCorrectAnswer(entry.getValue())) score++;
-		}
-		return score;
-	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

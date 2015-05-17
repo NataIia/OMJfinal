@@ -842,18 +842,20 @@ function quizDialog(quizID, questionNumber)
 
 function finishDialog(quizID)
 {
-	alert(quizID);
 	$('#quiz_done').text("Quiz DONE! Total score is: " + score);
 	// insert data in db
 	$.ajax({
 		type: "GET",
 		url: "submitSolution",
-		data: "student="+student.id+"&quiz="+quizID+"&"+quizAnswers,
+		data: "student="+student.id+"&quiz="+quizID+"&score="+score+"&"+quizAnswers,
 		dataType: "text",
 		success: function(json)
 		{
 			alert(json);
 			quizAnswers="quizAnswers=";
+			//refresh My Results tab
+			$("#solutionsTable").empty();
+			fillSolutionsForStudent();
 		},
 	    error: function( error )
 	      {
