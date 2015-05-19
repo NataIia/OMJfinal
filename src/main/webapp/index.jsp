@@ -52,7 +52,7 @@
 	        	<li>Deelnemers kunnen zich registreren - OK</li>
 	        	<li>Deelnemers kunnen de behaalde resultaten bekijken. - OK</li>
 	        	<li>Beheerders kunnen voor deelnemers een todo lijst opmaken - OK</li>
-	        	<li>Vragenreeksen kunnen afhankelijkheden hebben. (x kan pas gedaan worden indien deelnemer reeks y reeds met success voltooide.)</li>
+	        	<li>Vragenreeksen kunnen afhankelijkheden hebben. (x kan pas gedaan worden indien deelnemer reeks y reeds met success voltooide.) OK</li>
 	        	<li>Beheerders kunnen rapporten opmaken met de resultaten van 1 of meerdere deelnemers - OK</li>
 	        </ul>
 		   <h2>Log In</h2>
@@ -62,10 +62,12 @@
 	       <p>If student is logged in, tabs with personal tasks and results become enabled</p>
 	       <p class=tip>There is a teacher hardcoded in db with <em>login name=sciencekids password=111</em></p>
 	       <p>If teacher is logged in, tab for teacher become enabled</p>
-	       <h2>Tab Quiz</h2>
-	       <p>Initially all quizzes are shown in the table. They can be sorted asc and desc 
-	       		by clicking the corresponding table header. To show selected quizzes choose desired selection value
+	       <h2>Tables</h2>
+	       <p>Initially all results (quizzes, tasks and solutions lists) are shown in the table. They can be sorted asc and desc 
+	       		by clicking the corresponding table header. To show selected choose desired selection value
 	       		in the options lists</p>
+	       	<h2>Solve Quiz</h2>
+	       	<p>Some quizzes can be only solved if other is solved with at least 50% result</p>
 		  </div>
 		  <div id="quiz_tab">
 	       <table>
