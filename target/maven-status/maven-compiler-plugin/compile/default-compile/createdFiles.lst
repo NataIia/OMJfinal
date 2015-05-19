@@ -25,6 +25,7 @@ servlets\Tasks.class
 servlets\SelectSolutionsTeacher.class
 beans\Answer.class
 servlets\AssignQuizStudent.class
+servlets\CheckPrecessor.class
 beans\Student.class
 service\QuestionAnswerUtils.class
 beans\QuizSolution.class

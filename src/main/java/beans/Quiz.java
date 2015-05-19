@@ -7,12 +7,14 @@ public class Quiz extends Entity
 {
 	private int studyYear;
 	private ArrayList<Question> questions;
+	private Quiz mandatoryPrecessor;
 	
 	public Quiz(String thema, int id, Person author,
-			GregorianCalendar creationDate, int studyYear)
+			GregorianCalendar creationDate, int studyYear, Quiz mandatoryPrecessor)
 	{
 		super(thema, id, author, creationDate);
 		this.studyYear = studyYear;
+		this.mandatoryPrecessor = mandatoryPrecessor;
 	}
 
 	/**
@@ -45,6 +47,16 @@ public class Quiz extends Entity
 	public void setQuestions(ArrayList<Question> questions)
 	{
 		this.questions = questions;
+	}
+
+	public Quiz getMandatoryPrecessor()
+	{
+		return mandatoryPrecessor;
+	}
+
+	public void setMandatoryPrecessor(Quiz mandatoryPrecessor)
+	{
+		this.mandatoryPrecessor = mandatoryPrecessor;
 	}
 
 	/* (non-Javadoc)

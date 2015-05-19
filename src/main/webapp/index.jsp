@@ -14,7 +14,7 @@
 <div id="container">
     <div id="header">
       <div id="title">
-        <h1>Hello world</h1>
+        <h1>Ontwerpen met JAVA. Final project 2014-2015</h1>
       </div>
       <div id ="login">
       	<h4>Log In / Register</h4>

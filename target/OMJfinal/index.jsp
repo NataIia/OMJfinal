@@ -14,7 +14,7 @@
 <div id="container">
     <div id="header">
       <div id="title">
-        <h1>Hello world</h1>
+        <h1>Ontwerpen met JAVA. Final project 2014-2015</h1>
       </div>
       <div id ="login">
       	<h4>Log In / Register</h4>
@@ -50,7 +50,7 @@
 	        	<li>Deelnemers krijgen na elke vraag te zien of deze correct werd beantwoord - OK</li>
 	        	<li>Deelnemers krijgen na de vragenreeks te zien wat hun score is. - OK</li>
 	        	<li>Deelnemers kunnen zich registreren - OK</li>
-	        	<li>Deelnemers kunnen de behaalde resultaten bekijken. - half</li>
+	        	<li>Deelnemers kunnen de behaalde resultaten bekijken. - OK</li>
 	        	<li>Beheerders kunnen voor deelnemers een todo lijst opmaken - OK</li>
 	        	<li>Vragenreeksen kunnen afhankelijkheden hebben. (x kan pas gedaan worden indien deelnemer reeks y reeds met success voltooide.)</li>
 	        	<li>Beheerders kunnen rapporten opmaken met de resultaten van 1 of meerdere deelnemers - OK</li>

@@ -48,7 +48,7 @@ function fillQuizzes()
 		success: function(json)
 	      {
 			quizzes = json;
-			 var headings = ["Quiz ID", "Thema", "Study Year", "Number of questions"];
+			 var headings = ["Quiz ID", "Thema", "Study Year", "Number of questions", "Quiz need to be solved before"];
 			 var ids = [], rows = [];
 			 var themas = new Set(),  years = new Set(), questions = new Set();
 			 ids[0] = "Quiz ID";
@@ -57,7 +57,10 @@ function fillQuizzes()
 			 questions.add("Number of questions");
 			 for(var i = 1; i <= json.length; i++) 
 			 {
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], [json[i-1].studyYear], [json[i-1].questions.length]];
+				 if (json[i-1].mandatoryPrecessor == null)
+					 rows[i-1] = [json[i-1].id, [json[i-1].thema], [json[i-1].studyYear], [json[i-1].questions.length], "none"];
+				 else
+					 rows[i-1] = [json[i-1].id, [json[i-1].thema], [json[i-1].studyYear], [json[i-1].questions.length], json[i-1].mandatoryPrecessor.id];
 				 ids[i] = json[i-1].id;
 				 themas.add(json[i-1].thema);
 				 years.add(json[i-1].studyYear);
@@ -130,11 +133,14 @@ function selectQuizzes()
 		dataType: "json",
 		success: function(json)
 	      {
-			 var headings = ["Quiz ID", "Thema", "Study Year", "Number of questions"];
+			 var headings = ["Quiz ID", "Thema", "Study Year", "Number of questions", "Quiz need to be solved before"];
 			 var rows = [];
 			 for(var i = 1; i <= json.length; i++) 
 			 {
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], [json[i-1].studyYear], [json[i-1].questions.length]];
+				 if (json[i-1].mandatoryPrecessor == null)
+					 rows[i-1] = [json[i-1].id, [json[i-1].thema], [json[i-1].studyYear], [json[i-1].questions.length], "none"];
+				 else
+					 rows[i-1] = [json[i-1].id, [json[i-1].thema], [json[i-1].studyYear], [json[i-1].questions.length], json[i-1].mandatoryPrecessor.id];
 			 }
 			
 			htmlInsert("quizTable", getSortedTable(headings, rows, 'quizResult'));
@@ -192,7 +198,7 @@ function fillSolutionsForStudent()
 				 quiz_questions[i-1] = getBulletedList(questions_as_string);
 				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
 				 student_answers[i-1] = getBulletedList(student_answers_as_string);
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].date, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+				 rows[i-1] = [json[i-1].quiz.id, [json[i-1].thema], json[i-1].date, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
 				 ids[i] = json[i-1].id;
 				 themas.add(json[i-1].thema);
 				 dates.add(json[i-1].date_solution);
@@ -282,7 +288,7 @@ function selectSolutionsStudent()
 				 quiz_questions[i-1] = getBulletedList(questions_as_string);
 				 correct_answers[i-1] = getBulletedList(correct_answers_as_string);
 				 student_answers[i-1] = getBulletedList(student_answers_as_string);
-				 rows[i-1] = [json[i-1].id, [json[i-1].thema], json[i-1].date, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
+				 rows[i-1] = [json[i-1].quiz.id, [json[i-1].thema], json[i-1].date, [json[i-1].score], quiz_questions[i-1], correct_answers[i-1], student_answers[i-1] ];
 			 }
 			
 			htmlInsert("solutionsTable", getSortedTable(headings, rows, 'solutionsResult'));
@@ -657,8 +663,26 @@ function openQuizSolutionDialog(quizID, questionNumber)
 	if (student == null) alert ("Quiz can be solved only by registered students. Log-in or register.");
 	else
 		{
-			quizDialog(quizID, questionNumber);
-			$( "#QuizSolutionDialog" ).dialog( "open" ); 
+			$.ajax({
+				type: "GET",
+				url: "check_precessor",
+				data: "quizID="+quizID+"&studentID="+student.id,
+				dataType: "text",
+				success: function(response)
+				{
+					alert(response);	
+					if (response.includes("Success!"))
+						{
+							quizDialog(quizID, questionNumber);
+							$( "#QuizSolutionDialog" ).dialog( "open" );
+						}
+				},
+				error: function(error) 
+				{
+					alert("Error: " + error);
+				}
+			});
+ 
 		}
 }
 
@@ -781,7 +805,6 @@ function quizDialog(quizID, questionNumber)
 		buttons: {
 			"Submit answer": function() {
 				var answer = getInputData(quiz.questions[questionNumber]);
-//				alert(answer);
 				$.ajax({
 					type: "GET",
 					url: "check_answer",

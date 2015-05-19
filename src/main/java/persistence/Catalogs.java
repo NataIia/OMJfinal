@@ -238,6 +238,8 @@ public class Catalogs implements Idao
 	{
 		if (quizzes == null) quizzes = new ArrayList<>();
 		
+		Quiz mandatoryPrecessor = null;
+		
      	String queryQuiz = "select * from omj_final.tbl_quiz";
      	String queryQuizQuestions = "select * from omj_final.tbl_quiz_question";
      	
@@ -246,15 +248,21 @@ public class Catalogs implements Idao
 		Statement statement = connection.createStatement();
 		ResultSet rsQuiz = statement.executeQuery(queryQuiz);
 		GregorianCalendar creationDate = new GregorianCalendar();
+		
 		while (rsQuiz.next())
 			{
+				int precessor = rsQuiz.getInt("mandatory_precessor");
+				if (precessor != 0)
+				{
+					mandatoryPrecessor = quizzes.stream().filter(q -> (q.getId() == precessor)).findFirst().get();
+				}
 				int idAuthor = rsQuiz.getInt("author");
 				creationDate.setTimeInMillis(rsQuiz.getDate("creation_date").getTime());
 				quizzes.add(new Quiz(rsQuiz.getString("thema"),
 						rsQuiz.getInt("id"),
 						teachers.stream().filter(t -> (t.getId() == idAuthor)).findFirst().get(),
 						creationDate,
-						rsQuiz.getInt("study_year"))); 
+						rsQuiz.getInt("study_year"), mandatoryPrecessor)); 
 			}
 		
 		ResultSet rsQuizQuestions = statement.executeQuery(queryQuizQuestions);
@@ -535,6 +543,7 @@ public class Catalogs implements Idao
 			psIn.execute();
 			
 			ResultSet generatedKeys = psIn.getGeneratedKeys();
+			System.out.println(generatedKeys);
 			
 	        if (generatedKeys.next()) 
 	        {
