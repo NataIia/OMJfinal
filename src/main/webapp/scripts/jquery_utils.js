@@ -548,8 +548,7 @@ function fillTasksForTeacher()
 				 {
 				 	var buttonvalues = json[i-1].student.id + ';' + json[i-1].quiz.id ;
 				 	var buttonnames = ("$'#unassignQuizStudent'" + i);
-					 var unassignButton = '<input type="button" value="Unassign" class = unassignButton id = "unassignQuizStudent' + i + '\"/>';
-//					 
+					 var unassignButton = '<input type="button" value="Unassign" class = unassignButton id = "unassignQuizStudent' + i + '\"/>';					 
 					 rows[i-1] = [json[i-1].student.firstName + " " + json[i-1].student.secondName, json[i-1].quiz.id , json[i-1].status, unassignButton];
 					 students.add(json[i-1].student.firstName + " " + json[i-1].student.secondName + " id=" + json[i-1].student.id);
 
@@ -604,6 +603,7 @@ function fillTasksForTeacher()
 			
 			//add buttons listeners
 			$('#assignQuizStudent').click(assignQuizStudent);
+			$('.unassignButton').click(function(){alert ("TODO"); })
 		},
 	    error: function( error )
 	      {
